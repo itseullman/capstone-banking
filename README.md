@@ -1,2 +1,2 @@
-# capstone-banking
-Banking application capstone project
+# ken-batcher-memorial
+Memorial application in honor of Kenneth Batcher
