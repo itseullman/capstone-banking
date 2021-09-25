@@ -13,7 +13,7 @@ JSON data structure of OAKS database response:
 ////////////////////////////////////////////////////////////////////////////////
 //
 // GLOBAL VARIABLES
-var currentArchiveAddress = 'https://oaks.kent.edu/api/v1/collections/53';
+var currentArchiveAddress = 'https://oaks.kent.edu/api/v1/collections/14349';
 
 // [archiveID, header]
 var staranTab = [53, 'STARAN'];
