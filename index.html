@@ -1,111 +1,44 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="scripts/archive.js"></script>
-    <script type="text/javascript">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="description" content="To memorialize the life and archive the work of Kenneth E. Batcher">
+<meta name="keywords" content="mpp, goodyear, aerospace, aspro, staran">
+<meta name="author" content="Capstone group">
+<title>The Kenneth Batcher Archives</title>
+<link rel="stylesheet" href="./css/style.css">
+<script src="scripts/archive.js"></script>
+<script type="text/javascript">
+	// wait for the page to load first
+	window.onload = function() {
 
-      // wait for the page to load first
-      window.onload = function() {
+		// get a reference to the link on the page with an id
+		var staran = document.getElementById("staranPic");
+		var bitonic = document.getElementById("bitonicPic");
+		var mpp = document.getElementById("mppPic");
 
-        // get a reference to the link on the page with an id
-        var staran = document.getElementById("staranPic");
-        var bitonic = document.getElementById("bitonicPic");
-        var mpp = document.getElementById("mppPic");
-
-        // set code to run when the link is clicked by assigning a function to "onclick"
-        staran.onclick = function() { 
-          localStorage['archiveID'] = staranTab[0];
-          localStorage['header'] = staranTab[1];
-          window.location.href = 'archive.html';
-          return false; 
-        }
-        bitonic.onclick = function() { 
-          localStorage['archiveID'] = bitonicTab[0];
-          localStorage['header'] = bitonicTab[1];
-          window.location.href = 'archive.html';
-          return false; 
-        }
-        mpp.onclick = function() { 
-          localStorage['archiveID'] = mppTab[0];
-          localStorage['header'] = mppTab[1];
-          window.location.href = 'archive.html';
-          return false; 
-        }
-      }
-    </script>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <meta name="description" content="To memorialize the life and archive the work of Kenneth E. Batcher">
-	  <meta name="keywords" content="mpp, goodyear, aerospace, aspro, staran">
-  	<meta name="author" content="Capstone group">
-    <title>The Kenneth Batcher Archive | Coming Soon...</title>
-    <link rel="stylesheet" href="./css/style.css">
-  </head>
-  <body>
-    <header>
-      <div class="container">
-        <div id="welcome">
-          <h1><span class="highlight">The Kenneth Batcher Archive</span> Coming soon...</h1>
-        </div>
-        <nav>
-          <ul>
-            <li class="current"><a href="index.html">Home</a></li>
-            <li><a href="bio.html">Biography</a></li>
-            <li><a href="archive.html"> Temporary Archive</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-    <!--
-    <section id="showcase">
-      <div class="container">
-        <h1>The Kenneth E. Batcher Memorial Website</h1>
-        <p>Built by the students of Kent State University in collaboration with Dr. Batcher's family, friends, and colleages, to memorialize the life and work of one of his generations great computer scientists</p>
-      </div>
-    </section>
-    -->
-
-
-    <!-- Slideshow Container -->
-  <section id="Slideshow">
-  <div class="sideshow-container">
-    <!--Full-width images with number and caption text -->
-    <div class="mySlides fade">
-      <div class="numbertext">1/3</div>
-      <img src="./img/staran_add.png" style="width:100%">
-      <div class="text">Caption Text</div>
-    </div>
-
-    <div class="mySlides fade">
-      <div class="numbertext">2/3</div>
-      <img src="./img/radar_retro.png" style="width:100%">
-      <div class="text">Caption Text</div>
-    </div>
-
-    <div class="mySlides fade">
-      <div class="numbertext">3/3</div>
-      <img src="./img/img_mountains_wide.jpg" style="width:100%">
-      <div class="text">Caption Text</div>
-    </div>
-
-  <!--Next and previous buttons -->
-  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-  <a class="next" onclick="plusSlides(1)">&#10095;</a>
-
-</div>
-<br>
-
-<!-- The dots/circles -->
-<div style="text-align:center">
-  <span class="dot" onclick="currentSlide(1)"></span>
-  <span class="dot" onclick="currentSlide(2)"></span>
-  <span class="dot" onclick="currentSlide(3)"></span>
-</div>
-</section>
-
-
-<script>
-////////////////////////////////////////////////////////////////////////////////
+		// set code to run when the link is clicked by assigning a function to "onclick"
+		staran.onclick = function() { 
+			localStorage['archiveID'] = staranTab[0];
+			localStorage['header'] = staranTab[1];
+			window.location.href = 'archive.html';
+			return false; 
+		}
+		bitonic.onclick = function() { 
+			localStorage['archiveID'] = bitonicTab[0];
+			localStorage['header'] = bitonicTab[1];
+			window.location.href = 'archive.html';
+			return false; 
+		}
+		mpp.onclick = function() { 
+			localStorage['archiveID'] = mppTab[0];
+			localStorage['header'] = mppTab[1];
+			window.location.href = 'archive.html';
+			return false; 
+		}
+	}
+////////////////////////////////////////
 //
 // SLIDESHOW LOGIC
 ////////////////////////////////////////
@@ -115,79 +48,170 @@ var slideIndex = 1;
 showSlides(slideIndex);
 
 // Next/previous controls
-function plusSlides(n) 
-{
-  showSlides(slideIndex += n);
+function plusSlides(n) {
+	showSlides(slideIndex += n);
 }
 
 // Thumbnail image controls
-function currentSlide(n) 
-{
-  showSlides(slideIndex = n);
+function currentSlide(n) {
+	showSlides(slideIndex = n);
 }
 
 function showSlides(n) {
-  
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  
-  if (n > slides.length) {slideIndex = 1}
-  if (n < 1) {slideIndex = slides.length}
-  
-  for (i = 0; i < slides.length; i++) 
-  {
-      slides[i].style.display = "none";
-  }
-  for (i = 0; i < dots.length; i++) 
-  {
-      dots[i].className = dots[i].className.replace(" active", "");
-  }
-  
-  slides[slideIndex-1].style.display = "block";
-  dots[slideIndex-1].className += " active";
+	var i;
+	var slides = document.getElementsByClassName("mySlides");
+	var dots = document.getElementsByClassName("dot");
+
+	if (n > slides.length) {slideIndex = 1}
+	if (n < 1) {slideIndex = slides.length}
+
+	for (i = 0; i < slides.length; i++) {
+		slides[i].style.display = "none";
+	}
+	for (i = 0; i < dots.length; i++) {
+		dots[i].className = dots[i].className.replace(" active", "");
+	}
+
+	slides[slideIndex-1].style.display = "block";
+	dots[slideIndex-1].className += " active";
 }
 </script>
+</head>
 
-    <!-- 
-    <section id="newsletter">
-      <div class="container">
-        <h1>Subscribe for updates...</h1>
-        <form>
-          <input type="email" placeholder="Enter Email...">
-          <button type="submit" class="button_1">Subscribe</button>
-        </form>
-      </div>
-    </section>
-    -->
-    <section id="boxes">
-      <div class="container">
-        <div class="box">
-          <a id="staranPic" href="wine_table.html">
-            <img src="./img/staran_logo.png">
-          </a>
-          <h3>STARAN</h3>
-          <p> A Content Addressible Parallel Processor using content addressible memory. A version can be found on the EC-2 Hawkeye Radar Plane </p>
-        </div>
-        <div class="box">
-          <a id="bitonicPic" href="wine_table.html">
-            <img src="./img/aspro-logo.png">
-          </a>
-          <h3>ASPRO</h3>
-          <p>A "STARAN in a shoebox" the ASPRO computer was used in radar planes and used for air traffic control, including collision detection. </p>
-        </div>
-        <div class="box">
-          <a id="mppPic" href="wine_table.html">
-            <img src="./img/goodyear_aerospace.png">
-          </a>
-          <h3>Massively Parallel Processor</h3>
-          <p>A supercomputer built by Goodyear Aerospace for the NASA Goddard Space Flight Center. It was designed to deliver enormous computational power at lower cost than other existing supercomputer architectures, by using thousands of simple processing elements, rather than one or a few highly complex CPUs.</p>
-        </div>
-      </div>
-    </section>
 
-    <footer>
-      <p>Kent State University, Copyright &copy; 2020</p>
-    </footer>
-  </body>
+
+<body>
+<header>
+	<div class="container">
+		<div id="welcome">
+			<h1><span class="highlight">The Kenneth Batcher Archive</span> Coming soon...</h1>
+		</div>
+		<nav>
+			<ul>
+				<li class="current"><a href="index.html">Home</a></li>
+				<li><a href="bio.html">Biography</a></li>
+				<li><a href="archive.html"> Temporary Archive</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+
+
+
+<!--
+<section id="showcase">
+<div class="container">
+<h1>The Kenneth E. Batcher Memorial Website</h1>
+<p>Built by the students of Kent State University in collaboration with Dr. Batcher's family,
+friends, and colleages, to memorialize the life and work of one of his generation's great computer scientists</p>
+</div>
+</section>
+-->
+
+
+<!-- Slideshow Container -->
+<section id="Slideshow">
+	<div class="sideshow-container">
+		<!--Full-width images with number and caption text -->
+		<div class="mySlides fade">
+			<div class="numbertext">1/3</div>
+			<img src="./img/staran_add.png" style="width:100%">
+			<div class="text">Caption Text</div>
+		</div>
+
+		<div class="mySlides fade">
+			<div class="numbertext">2/3</div>
+			<img src="./img/radar_retro.png" style="width:100%">
+			<div class="text">Caption Text</div>
+		</div>
+
+		<div class="mySlides fade">
+			<div class="numbertext">3/3</div>
+			<img src="./img/img_mountains_wide.jpg" style="width:100%">
+			<div class="text">Caption Text</div>
+		</div>
+
+		<!--Next and previous buttons -->
+		<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+		<a class="next" onclick="plusSlides(1)">&#10095;</a>
+	</div>
+	<br>
+
+	<!-- The dots/circles -->
+	<div style="text-align:center">
+		<span class="dot" onclick="currentSlide(1)"></span>
+		<span class="dot" onclick="currentSlide(2)"></span>
+		<span class="dot" onclick="currentSlide(3)"></span>
+	</div>
+</section>
+
+
+
+
+
+<!-- 
+<section id="newsletter">
+<div class="container">
+<h1>Subscribe for updates...</h1>
+<form>
+<input type="email" placeholder="Enter Email...">
+<button type="submit" class="button_1">Subscribe</button>
+</form>
+</div>
+</section>
+-->
+
+
+
+<section id="boxes">
+	<div class="container">
+		<div class="box">
+			<a id="staranPic" href="wine_table.html">
+				<img src="./img/staran_logo.png">
+			</a>
+			<h3>STARAN</h3>
+			<p> A Content Addressible Parallel Processor using content addressible memory. A version can be found on the EC-2 Hawkeye Radar Plane </p>
+		</div>
+		<div class="box">
+			<a id="bitonicPic" href="wine_table.html">
+				<img src="./img/aspro-logo.png">
+			</a>
+			<h3>ASPRO</h3>
+			<p>A "STARAN in a shoebox" the ASPRO computer was used in radar planes and used for air traffic control, including collision detection. </p>
+		</div>
+		<div class="box">
+			<a id="mppPic" href="wine_table.html">
+				<img src="./img/goodyear_aerospace.png">
+			</a>
+			<h3>Massively Parallel Processor</h3>
+			<p>A supercomputer built by Goodyear Aerospace for the NASA Goddard Space Flight Center. It was designed to deliver enormous computational power at lower cost than other existing supercomputer architectures, by using thousands of simple processing elements, rather than one or a few highly complex CPUs.</p>
+		</div>
+	</div>
+</section>
+<footer>
+	<p>Kent State University, Copyright &copy; 2020</p>
+</footer>
+</body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
