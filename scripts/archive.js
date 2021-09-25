@@ -1,3 +1,15 @@
+/*
+JSON data structure of OAKS database response:
+	id – (integer) the internal OAKS id for the item
+	title – (string) the title of the item
+	author – (delimited string) the author(s) of the (multiple authors are separated by the semi-colon character)
+	date – (string) the date the item was published in the format
+	public_url – (string) a URL to the public display of the item in OAKS
+	pdf_url – (string) a URL to the PDF for the item (if it has a PDF in OAKS)
+*/
+
+
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 // GLOBAL VARIABLES
