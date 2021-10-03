@@ -1,0 +1,70 @@
+
+<script src="scripts/archive.js"></script>
+
+<script type="text/javascript">
+	// wait for the page to load first
+	window.onload = function() {
+
+		// get a reference to the link on the page with an id
+		var staran = document.getElementById("staranPic");
+		var bitonic = document.getElementById("bitonicPic");
+		var mpp = document.getElementById("mppPic");
+
+		// set code to run when the link is clicked by assigning a function to "onclick"
+		staran.onclick = function() { 
+			localStorage['archiveID'] = staranTab[0];
+			localStorage['header'] = staranTab[1];
+			window.location.href = 'archive.html';
+			return false; 
+		}
+		bitonic.onclick = function() { 
+			localStorage['archiveID'] = bitonicTab[0];
+			localStorage['header'] = bitonicTab[1];
+			window.location.href = 'archive.html';
+			return false; 
+		}
+		mpp.onclick = function() { 
+			localStorage['archiveID'] = mppTab[0];
+			localStorage['header'] = mppTab[1];
+			window.location.href = 'archive.html';
+			return false; 
+		}
+	}
+////////////////////////////////////////
+//
+// SLIDESHOW LOGIC
+////////////////////////////////////////
+
+
+var slideIndex = 1;
+showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n) {
+	showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+	showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+	var i;
+	var slides = document.getElementsByClassName("mySlides");
+	var dots = document.getElementsByClassName("dot");
+
+	if (n > slides.length) {slideIndex = 1}
+	if (n < 1) {slideIndex = slides.length}
+
+	for (i = 0; i < slides.length; i++) {
+		slides[i].style.display = "none";
+	}
+	for (i = 0; i < dots.length; i++) {
+		dots[i].className = dots[i].className.replace(" active", "");
+	}
+
+	slides[slideIndex-1].style.display = "block";
+	dots[slideIndex-1].className += " active";
+}
+</script>
