@@ -6,13 +6,18 @@
 
 /*
 	Defined constants:
+	
+		Misc:
 	TIMEZONE
+	REQUEST_PAGE
+	REQUEST_ACTION
 	
 		Url constants:
 	BASE_WWW
 	CSS_WWW
 	JS_WWW
 	IMG_WWW
+	OAKS_WWW
 	
 		Directory constants:
 	BASE_DIR
@@ -51,10 +56,13 @@ define('JS_WWW', BASE_WWW . '/scripts');
 // Define IMG_WWW
 define('IMG_WWW', BASE_WWW . '/img');
 
+// Define OAKS_WWW
+define('OAKS_WWW', 'https://oaks.kent.edu/api/v1/collections/14349');
+
+
+
 // Define BASE_DIR
 define('BASE_DIR', getcwd());
-
-
 
 // Define CSS_DIR
 define('CSS_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'css');
@@ -81,6 +89,16 @@ define('MODULE_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'modules');
 // because that would become: page = password.txt
 $page = (isset($_REQUEST['page']) && is_string($_REQUEST['page'])) ? basename($_REQUEST['page']) : '';
 
+// We cannot defined REQUEST_PAGE yet because we need to test
+// for the existence of some files first. And the value of REQUEST_PAGE
+// will reflect that actual page which is loaded.
+// define("REQUEST_PAGE", $page);
+
+
+// Grab the requested action, if there is one.
+$action = (isset($_REQUEST['action']) && is_string($_REQUEST['action'])) ? $_REQUEST['action'] : '';
+define("REQUEST_ACTION", $action);
+
 
 
 // Start a buffer to capture the output which
@@ -90,6 +108,8 @@ ob_start();
 
 // Look for a $page corresponding to a .php module:
 if (strlen($page) > 0 && file_exists(MODULE_DIR . DIRECTORY_SEPARATOR . $page . '.php')) {
+	
+	define("REQUEST_PAGE", $page);
 	require_once(MODULE_DIR . DIRECTORY_SEPARATOR . $page . '.php');
 	
 // Look for a $page corresponding to an .html template:
@@ -103,8 +123,10 @@ if (strlen($page) > 0 && file_exists(MODULE_DIR . DIRECTORY_SEPARATOR . $page . 
 	
 	$template = '';
 	if (file_exists(VIEW_DIR . DIRECTORY_SEPARATOR . $page . '.html')) {
+		define("REQUEST_PAGE", $page);
 		$template = file_get_contents(VIEW_DIR . DIRECTORY_SEPARATOR . $page . '.html');
 	} else {
+		define("REQUEST_PAGE", 'home');
 		$template = file_get_contents(VIEW_DIR . DIRECTORY_SEPARATOR . 'home.html');
 	}
 	// TODO: do replacements on placeholders in $template
