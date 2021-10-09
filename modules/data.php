@@ -28,8 +28,8 @@ function get_oaks_data() {
 */
 
 switch (REQUEST_ACTION) {
-	case 'all':
-	echo "case 'all' not implemented yet.";
+	case 'sq3':
+	case_sq3_test();
 	break;
 	
 	case 'table':
@@ -41,6 +41,20 @@ switch (REQUEST_ACTION) {
 	break;
 }
 
+
+function case_sq3_test() {
+	$db = new SQLite3(DB_DIR . DIRECTORY_SEPARATOR . 'batcher.db');
+	
+	/*
+	$db->exec('DROP TABLE IF EXISTS strings');
+	$db->exec('CREATE TABLE strings (tag_name VARCHAR(50), text VARCHAR(2000), lang VARCHAR(20))');
+	$db->exec("INSERT INTO strings (tag_name, text, lang) VALUES ('data-test1', 'This is the first test of the language system.', 'en-US')");
+	*/
+	
+	//$db->exec("INSERT INTO strings (tag_name, text, lang) VALUES ('data-test2', 'This string, and the one above it where pulled from the database.', 'en-US')");
+	$result = $db->query('SELECT tag_name, text, lang FROM strings');
+	var_dump($result->fetchArray(SQLITE3_ASSOC));
+}
 
 
 
@@ -72,6 +86,8 @@ EOT;
 	}
 	
 	echo <<<EOT
+<p>{{data-test1}}</p>
+<p>{{data-test2}}</p>
 <table>
 	<tr>
 		<th>

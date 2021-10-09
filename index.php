@@ -79,9 +79,28 @@ define('VIEW_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'views');
 // Define MODULE_DIR
 define('MODULE_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'modules');
 
+// Define DB_DIR
+define('DB_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'db');
+
 #-------------------------------------#
 # END OF DEFINE SOME GLOBAL CONSTANTS #
 #######################################
+
+
+/*
+	The db connection is created the first time
+	this function is called. Afterwords, the
+	db connection is simply returned.
+*/
+function db() {
+	static $db = null;
+	if (is_null($db)) {
+		$db = new SQLite3(DB_DIR . DIRECTORY_SEPARATOR . 'batcher.db');
+	}
+	return $db;
+}
+
+
 
 
 // basename ensures that people can't sumbit something like
@@ -89,9 +108,9 @@ define('MODULE_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'modules');
 // because that would become: page = password.txt
 $page = (isset($_REQUEST['page']) && is_string($_REQUEST['page'])) ? basename($_REQUEST['page']) : '';
 
-// We cannot defined REQUEST_PAGE yet because we need to test
+// We cannot define REQUEST_PAGE yet because we need to test
 // for the existence of some files first. And the value of REQUEST_PAGE
-// will reflect that actual page which is loaded.
+// will reflect the actual page which is loaded.
 // define("REQUEST_PAGE", $page);
 
 
@@ -129,7 +148,7 @@ if (strlen($page) > 0 && file_exists(MODULE_DIR . DIRECTORY_SEPARATOR . $page . 
 		define("REQUEST_PAGE", 'home');
 		$template = file_get_contents(VIEW_DIR . DIRECTORY_SEPARATOR . 'home.html');
 	}
-	// TODO: do replacements on placeholders in $template
+	
 	
 	// Now output the template so that the output buffer
 	// can grab a hold of it. Later we will insert
@@ -138,15 +157,41 @@ if (strlen($page) > 0 && file_exists(MODULE_DIR . DIRECTORY_SEPARATOR . $page . 
 	
 }
 
+
+// Grab the html template (or php module output)
+$output = ob_get_clean();
+
+
+$db = db();
+// Need two percent signs inside of sprintf because % is a control
+// character in sprintf. The first % escapes the second one.
+//
+// Note that REQUEST_PAGE is safe to inject into the query. The logic of the code above
+// limits the possible values to known and predifined possibilities.
+$result = $db->query(sprintf('SELECT tag_name, text FROM strings WHERE lang = "en-US" and tag_name LIKE ("%s-%%")', REQUEST_PAGE));
+if ($result instanceof SQLite3Result) {
+	$search = [];
+	$replace = [];
+	while ($item = $result->fetchArray(SQLITE3_ASSOC)) {
+		$search[] = sprintf('{{%s}}', $item['tag_name']);
+		$replace[] = $item['text'];
+	}
+	$output = str_replace(
+		$search,
+		$replace, 
+		$output
+	);
+}
+
 // If we need to output HTML Headers, this is the place to do it,
 // since at this point, no output has been sent to the browser
 
 echo str_replace(
-	'{{main-body}}', 	
+	'{{main-body}}', 														// search
 	// Get the contents of the buffer,
-	// and wipe the buffer clean.											// search
-	ob_get_clean(), 														// replace
-	file_get_contents(VIEW_DIR . DIRECTORY_SEPARATOR . 'main.html'),		// context
+	// and wipe the buffer clean.	
+	$output, 																// replace
+	file_get_contents(VIEW_DIR . DIRECTORY_SEPARATOR . 'main.html')		// context
 );
 
 
