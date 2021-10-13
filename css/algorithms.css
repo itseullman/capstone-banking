@@ -1,0 +1,79 @@
+.algorithms__root {
+  padding: 20px;
+}
+
+.algorithms__title {
+  font-weight: 400;
+  font-size: 2.25rem;
+  margin: 0;
+}
+
+.algorithms__subtitle {
+  max-width: 35rem;
+  width: 90%;
+  margin: 5px 0;
+  font-size: 1.25rem;
+  color: #8e8e93;
+}
+
+.algorithms__card__container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.algorithms__card {
+  box-shadow: 1px 1px 12px lightgray;
+  border-radius: 10px;
+  padding: 15px;
+
+  min-width: 25rem;
+  width: 25rem;
+  height: 12rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem;
+
+  transition: ease-in 0.2s;
+}
+
+.algorithms__card:hover {
+  cursor: pointer;
+  transform: translate(0, -1rem);
+}
+
+.algorithms__card img {
+  height: 50px;
+  width: 50px;
+  margin-bottom: 10px;
+}
+
+.algorithms__card h2 {
+  font-weight: 300;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+@media screen and (max-width: 890px) {
+  .algorithms__card__container {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .algorithms__card {
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .algorithms__card {
+    width: 15rem;
+    max-width: 15rem;
+    min-width: 15rem;
+  }
+}
