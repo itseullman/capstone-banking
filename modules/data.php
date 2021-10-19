@@ -1,10 +1,9 @@
 <?php
 
+isAjax(true);
 
-function get_oaks_data() {
-	$result = file_get_contents(OAKS_WWW, false, stream_context_create(['http' => ['method'  => 'GET']]));
-	$result = json_decode($result, true);
-	return $result;
+function get_oaks_data($search_term) {
+	return file_get_contents(OAKS_WWW . '/' . urlencode($search_term), false, stream_context_create(['http' => ['method'  => 'GET']]));
 }
 
 
@@ -36,10 +35,29 @@ switch (REQUEST_ACTION) {
 	case_data_table();
 	break;
 	
+	case 'oaks':
+	case_oaks();
+	break;
+	
 	default:
 	echo "case 'default' not implemented yet.";
 	break;
 }
+
+
+function case_oaks() {
+	if (!isset($_REQUEST['q'])) {
+		echo json_encode(['error' => 'A search term is required.']);
+		return;
+	}
+	$q = trim($_REQUEST['q']);
+	if (strlen($q) < 3) {
+		echo json_encode(['error' => 'The search string must be at least three characters long.']);
+		return;
+	}
+	echo get_oaks_data($q);
+}
+
 
 
 function case_sq3_test() {
@@ -59,7 +77,7 @@ function case_sq3_test() {
 
 
 function case_data_table() {
-	$data = get_oaks_data();
+	$data = json_decode(get_oaks_data(), true);
 	$output = '';
 	if (is_array($data)) {
 		foreach ($data as $item) {

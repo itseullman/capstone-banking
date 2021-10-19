@@ -1,12 +1,9 @@
-<div id="root"></div>
-<h1 class="header">Batcher Archive</h1>
-<p class="tabHeader">
-	<button class="tab" onclick="tab(staranTab[0], staranTab[1]);">STARAN</button>
-	<button class="tab" onclick="tab(bitonicTab[0], bitonicTab[1]);">ASPRO</button>
-	<button class="tab" onclick="tab(mppTab[0], mppTab[1]);">MPP</button>
-	<button class="searchButton" onclick="search();">Search</button>
-	<input class="searchBar" type="text" id="searchTextBox"/>
-</p>
-<table id="searchResults"  border="1" cellpadding="2" > </table>
-<h2 class="tabTitle" id="header"></h2>
-<table id="myTableData"  border="1" cellpadding="2" > </table>
+<section id="archive-page">
+	<h1>The Archive</h1>
+	<form method="get" action="./index.php?page=data&action=oaks">
+		<input type="search">
+		<input type="submit" value="Search">
+	</form>
+	<div class="ajax-response"></div>
+</section>
+<script src="./scripts/archive.js"></script>
