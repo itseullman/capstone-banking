@@ -1,6 +1,21 @@
 # ken-batcher-memorial
 Memorial application in honor of Kenneth Batcher
 
+
+### Hassan's GitHub Instructions:
+1. Pull from the main branch to make sure you are up to date locally before branching off:
+git pull origin main
+2. Checkout a new branch locally
+git checkout -b <name-of-new-branch>
+
+You only need the -b flag if this branch is new to your local machine
+3. Commit and push to the branch
+git add .
+git commit -m "My commit message"
+git push origin <name-of-new-branch>
+Then you can create a PR through github's website.
+
+
 ### Uploading code via Git Gui
 1. From inside the local folder containing the files you want to upload, open Git Gui.
 	1. Git Gui can be opened by right clicking and selecting Git Gui.
