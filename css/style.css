@@ -27,8 +27,8 @@ body {
 body > header {
 	background: #0a0d6f;
 	color: #ffffff;
-	padding: 10px 20px;
 	border-bottom: #ffab1b 3px solid;
+	padding-top: 20px;
 }
 
 body > header a {
@@ -40,6 +40,8 @@ body > header a {
 
 body > header > h1 {
 	color: #ffab1b;
+	margin: 0;
+	padding-left: 20px;
 }
 
 body > header > nav ul {
@@ -48,8 +50,14 @@ body > header > nav ul {
 	list-style: none;
 }
 
-nav ul li {
-	margin: 0 10px;
+body > header > nav ul li {
+    padding: 5px 15px;
+}
+body > header > nav ul li:hover {
+	background-color: #ffab1b;
+}
+body > header > nav ul li:hover a {
+	color: black;
 }
 
 @media only screen and (max-width: 450px) {
