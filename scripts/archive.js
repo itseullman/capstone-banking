@@ -12,8 +12,10 @@ var Program = {
 	
 	searchResults: null,
 	
+	loadingSpinner: null,
+	
 	Start: function() {
-		this.page = document.querySelector('#archive-page');
+		this.page = document.querySelector('#page-archive');
 		if (!this.page) {
 			throw "The page structure has been broken.";
 		}
@@ -28,9 +30,15 @@ var Program = {
 			throw "The page structure has been broken.";
 		}
 		
+		this.loadingSpinner = this.page.querySelector('form img');
+		if (!this.loadingSpinner) {
+			throw "The page structure has been broken.";
+		}
+		
 		this.searchForm.addEventListener('submit', event => {
 			event.preventDefault();
 			this.searchResults.innerText = '';
+			this.loadingSpinner.classList.remove('hidden');
 			try {
 				let searchInput = event.target.querySelector('input[type=search]');
 				if (!searchInput) {
@@ -49,15 +57,21 @@ var Program = {
 							response.forEach(item => {
 								output += `${item.author}, ${item.title}`;
 							});
+							if (output.length == 0) {
+								output = "No results...";
+							}
 							this.searchResults.innerText = output;
 						}
 						console.log(response);
+						this.loadingSpinner.classList.add('hidden');
 					},
 					fail: (statusText) => {
 						console.log(statusText);
+						this.loadingSpinner.classList.add('hidden');
 					},
 				});
 			} catch (error) {
+				this.loadingSpinner.classList.add('hidden');
 				this.searchResults.innerText = error;
 			}
 		});

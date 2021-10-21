@@ -2,6 +2,10 @@
 	CSS Styles
 	
 	MAIN PAGE
+	
+	MISC STYLES
+	
+	HOME PAGE
 	ARCHIVE PAGE
 	BIO PAGE
 */
@@ -93,8 +97,18 @@ ul {
 }
 /* #### END OF MAIN PAGE #### */
 
+/* #### MISC STYLES #### */
+.hidden {
+	display: none;
+}
+/* #### END OF MISC STYLES #### */
 
-
+/* #### HOME PAGE #### */
+#page-home img {
+	max-width: 390px;
+	min-height: 275px;
+}
+/* #### END OF HOME PAGE #### */
 
 
 
@@ -102,6 +116,18 @@ ul {
 
 input[type=search] {
 	width: 400px;
+}
+
+#page-archive form input {
+	margin-top: 20px;
+}
+
+/* loading spinner */
+#page-archive form img {
+	width: 30px;
+	height: 30px;
+	position: relative;
+    top: 10px;
 }
 
 /* #### END OF ARCHIVE PAGE #### */
