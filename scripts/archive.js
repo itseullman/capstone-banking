@@ -55,12 +55,12 @@ var Program = {
 						} else if (response instanceof Array) {
 							let output = '';
 							response.forEach(item => {
-								output += `${item.author}, ${item.title}`;
+								output += `${item.author}, ${item.title}<br>`;
 							});
 							if (output.length == 0) {
 								output = "No results...";
 							}
-							this.searchResults.innerText = output;
+							this.searchResults.innerHTML = output;
 						}
 						console.log(response);
 						this.loadingSpinner.classList.add('hidden');
