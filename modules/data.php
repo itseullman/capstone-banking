@@ -1,34 +1,32 @@
 <?php
 
-isAjax(true);
 
-function get_oaks_data($search_term) {
-	return file_get_contents(OAKS_WWW . '/' . urlencode($search_term), false, stream_context_create(['http' => ['method'  => 'GET']]));
-}
+include_once(CORE_DIR . DIRECTORY_SEPARATOR . 'Oaks.php');
 
 
-/*
-  object(stdClass)#1 (7) {
-    ["id"]=>
-    string(5) "16621"
-    ["title"]=>
-    string(83) "A scalable associative processor with applications in database and image processing"
-    ["author"]=>
-    string(44) "Hong Wang;Lei Xie;Meiduo Wu;Robert A. Walker"
-    ["date"]=>
-    string(7) "2004-04"
-    ["public_url"]=>
-    string(32) "https://oaks.kent.edu/node/16621"
-    ["pdf_url"]=>
-    string(0) ""
-    ["search_api_excerpt"]=>
-    string(0) ""
-  }
-*/
+		/*(
+			[id] => 16621
+			[title] => A scalable associative processor with applications in database and image processing
+			[author] => Hong Wang;Lei Xie;Meiduo Wu;Robert A. Walker
+			[date] => 2004-04
+			[public_url] => https://oaks.kent.edu/node/16621
+			[pdf_url] => 
+			[search_api_excerpt] => 
+		)*/
 
 switch (REQUEST_ACTION) {
-	case 'sq3':
-	case_sq3_test();
+	// View strings (or intialize the strings table)
+	case 'sq3_strings':
+	case_sq3_strings();
+	break;
+	
+	// View Oaks meta-data (or intialize the meta_data table)
+	case 'sq3_oaks':
+	case_sq3_oaks();
+	break;
+	
+	case 'sq3_query':
+	case_sq3_query();
 	break;
 	
 	case 'table':
@@ -36,6 +34,7 @@ switch (REQUEST_ACTION) {
 	break;
 	
 	case 'oaks':
+	isAjax(true);
 	case_oaks();
 	break;
 	
@@ -60,8 +59,46 @@ function case_oaks() {
 
 
 
-function case_sq3_test() {
-	$db = new SQLite3(DB_DIR . DIRECTORY_SEPARATOR . 'batcher.db');
+function case_sq3_query() {
+	$query = null;
+	$results = [];
+	if (isset($_REQUEST['query'])) {
+		$db = db();
+		$data = $db->query($_REQUEST['query']);
+		while ($row = $data->fetchArray()) {
+			$results[] = implode(",\t", $row);
+		}
+	}
+	$results = implode('<br>', $results);
+	
+echo <<<EOT
+<form method="POST" action="">
+<input type="text" name="query" style="width: 400px">
+<input type="submit" name="Execute">
+</form>
+<div>
+$results
+</div>
+EOT;
+}
+
+
+
+function case_sq3_oaks() {
+	$db = db();
+	
+	//$db->exec('DROP TABLE IF EXISTS oaks_meta');
+	//$db->exec('CREATE TABLE oaks_meta (meta_name VARCHAR(50), meta_value VARCHAR(200), meta_order INT, UNIQUE(meta_name))');
+	//$result = @$db->exec("INSERT INTO oaks_meta (meta_name, meta_value, meta_order) VALUES ('meta_name', 'meta_value', 0)");
+	//var_dump($result);
+	
+	$result = @$db->query('SELECT meta_name, meta_value, meta_order FROM oaks_meta');
+	var_dump($result->fetchArray(SQLITE3_ASSOC));
+}
+
+
+function case_sq3_strings() {
+	$db = db();
 	
 	/*
 	$db->exec('DROP TABLE IF EXISTS strings');
@@ -77,35 +114,67 @@ function case_sq3_test() {
 
 
 function case_data_table() {
-	$data = json_decode(get_oaks_data(), true);
+	
+	/*(
+		[id] => 16621
+		[title] => A scalable associative processor with applications in database and image processing
+		[author] => Hong Wang;Lei Xie;Meiduo Wu;Robert A. Walker
+		[date] => 2004-04
+		[public_url] => https://oaks.kent.edu/node/16621
+		[pdf_url] => 
+		[search_api_excerpt] => 
+	)*/
+	
+	$oaks = OakSearch::Instance();
+	$data = $oaks();
+	
 	$output = '';
-	if (is_array($data)) {
-		foreach ($data as $item) {
-			$output .= <<<EOT
+	foreach ($data as $item) {
+		$output .= <<<EOT
 	<tr>
 		<td>
-		{$item['title']}
+		{$item->title}
 		</td>
 		<td>
-		{$item['author']}
+		{$item->author}
 		</td>
 		<td>
-		{$item['date']}
+		{$item->date_formatted}
 		</td>
 		<td>
-		{$item['public_url']}
+		{$item->public_url}
 		</td>
 		<td>
-		{$item['pdf_url']}
+		{$item->pdf_url}
 		</td>
 	</tr>
+
 EOT;
-		}
 	}
+	
+	$meta = OakMeta::Instance();
+	$min_year = $meta->Get('year-min');
+	$max_year = $meta->Get('year-max');
+
+	if (!is_array($min_year)) {
+		$min_year = "Not set yet";
+	} else {
+		$min_year = $min_year['meta_value'];
+	}
+	if (!is_array($max_year)) {
+		$max_year = "Not set yet";
+	} else {
+		$max_year = $max_year['meta_value'];
+	}
+	
 	
 	echo <<<EOT
 <p>{{data-test1}}</p>
 <p>{{data-test2}}</p>
+<div><br>
+Min year: $min_year<br>
+Max year: $max_year<br>
+</div>
 <table>
 	<tr>
 		<th>

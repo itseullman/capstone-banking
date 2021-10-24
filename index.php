@@ -26,6 +26,8 @@
 	IMG_DIR
 	VIEW_DIR
 	MODULE_DIR
+	CORE_DIR
+	DB_DIR
 */
 	
 	
@@ -78,6 +80,9 @@ define('VIEW_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'views');
 
 // Define MODULE_DIR
 define('MODULE_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'modules');
+
+// Define CORE_DIR
+define('CORE_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'core');
 
 // Define DB_DIR
 define('DB_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'db');
@@ -138,6 +143,13 @@ function stringReplacements($page, $string) {
 		);
 	}
 	return $string;
+}
+
+function debug($var) {
+	$c = function($stmt) { return $stmt; };
+	return <<<EOT
+<pre>{$c(print_r($var, true))}</pre>
+EOT;
 }
 
 
@@ -211,10 +223,16 @@ if (isAjax()) {
 	// since at this point, no output has been sent to the browser
 
 	echo str_replace(
-		'{{main-body}}', 														// search
+		[
+			'{{main-body}}', 														// search
+			'{{curr_year}}',
+		], 														// search
 		// Get the contents of the buffer,
 		// and wipe the buffer clean.	
-		$output, 																// replace
+		[
+			$output, 																// replace
+			date('Y'),
+		],
 		file_get_contents(VIEW_DIR . DIRECTORY_SEPARATOR . 'main.html')		// context
 	);
 }
