@@ -140,14 +140,15 @@ input[type='search'] {
 
 /* #### END OF BIO PAGE #### */
 
-/* COMMON STYLES */
+/* GLOBAL STYLES */
 .card {
   border-radius: 5px;
   box-shadow: 1px 1px 12px lightgray;
+  cursor: pointer;
   transition: ease-in 0.2s;
 }
 
-.card:hover {
+div[hover]:hover {
   cursor: pointer;
   transform: translate(0, -1rem);
 }
