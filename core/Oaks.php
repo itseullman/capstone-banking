@@ -28,7 +28,7 @@ class OakSearch {
 	}
 }
 
-class OakResult {
+class OakResult implements JsonSerializable {
 	/*(
 		[id] => 16621
 		[title] => A scalable associative processor with applications in database and image processing
@@ -85,7 +85,6 @@ class OakResult {
 		if (isset($item['search_api_excerpt'])) {
 			$this->search_api_excerpt_ = $item['search_api_excerpt'];
 		}
-		
 	}
 	
 	public function __get($name) {
@@ -117,6 +116,35 @@ class OakResult {
 			default:
 			throw new Exception(sprintf('OakResult does not have a %s property.', htmlspecialchars($name)));
 		}
+	}
+
+    public function jsonSerialize() {
+        return [
+			'id' => $this->id_,
+			'title' => $this->title_,
+			'author' => $this->author_,
+			'date' => $this->date_,
+			'date_formatted' => $this->date_formatted_,
+			'public_url' => $this->public_url_,
+			'pdf_url' => $this->pdf_url_,
+			'search_api_excerpt' => $this->search_api_excerpt_,
+		];
+    }
+	
+	public function ToItem() {
+		// item_id, title, published_date, bib_text, origin_id, document_number, location_id, archive_number, comments, public_url, pdf_url
+        return [
+			'title' => $this->title_,
+			'published_date' => $this->date_formatted_,
+			'bib_text' => '',
+			'origin_id' => '',
+			'document_number' => '',
+			'location_id' => '',
+			'archive_number' => $this->id_,
+			'comments' => '',
+			'public_url' => $this->public_url_,
+			'pdf_url' => $this->pdf_url_,
+		];
 	}
 }
 
