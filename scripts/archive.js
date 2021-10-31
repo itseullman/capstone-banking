@@ -1,14 +1,16 @@
 "use strict";
 
-if (typeof Program !== 'undefined') {
+if (typeof ArchiveProgram !== 'undefined') {
 	throw "The variable Program has already been defined. No javascript will be available on this page.";
 }
 
-var Program = {
+var ArchiveProgram = {
 	
 	page: null,
 	
 	searchForm: null,
+	
+	searchInput: null,
 	
 	searchResults: null,
 	
@@ -22,60 +24,73 @@ var Program = {
 		
 		this.searchForm = this.page.querySelector('form');
 		if (!this.searchForm) {
-			throw "The page structure has been broken.";
+			throw "The page structure has been broken. No form element was found.";
+		}
+		
+		this.searchInput = this.searchForm.querySelector('input[type=search]');
+		if (!this.searchInput) {
+			throw "The page structure has been broken. No search input element was found.";
 		}
 		
 		this.searchResults = this.page.querySelector('.ajax-response');
 		if (!this.searchResults) {
-			throw "The page structure has been broken.";
+			throw "The page structure has been broken. No search results element was found.";
 		}
 		
 		this.loadingSpinner = this.page.querySelector('form img');
 		if (!this.loadingSpinner) {
-			throw "The page structure has been broken.";
+			throw "The page structure has been broken. No loading spinner was found.";
 		}
 		
 		this.searchForm.addEventListener('submit', event => {
 			event.preventDefault();
-			this.searchResults.innerText = '';
-			this.loadingSpinner.classList.remove('hidden');
-			try {
-				let searchInput = event.target.querySelector('input[type=search]');
-				if (!searchInput) {
-					throw "No search input found. The search cannot continue.";
-				}
-				if (searchInput.value.length < 3) {
-					throw "The search string must be at least three characters long.";
-				}
-				this.Ajax({
-					url: `${event.target.action}&q=${encodeURIComponent(searchInput.value)}`,
-					success: (response) => {
-						if (response.error) {
-							this.searchResults.innerText = response.error;
-						} else if (response instanceof Array) {
-							let output = '';
-							response.forEach(item => {
-								output += `${item.author}, ${item.title}<br>`;
-							});
-							if (output.length == 0) {
-								output = "No results...";
-							}
-							this.searchResults.innerHTML = output;
-						}
-						console.log(response);
-						this.loadingSpinner.classList.add('hidden');
-					},
-					fail: (statusText) => {
-						console.log(statusText);
-						this.loadingSpinner.classList.add('hidden');
-					},
-				});
-			} catch (error) {
-				this.loadingSpinner.classList.add('hidden');
-				this.searchResults.innerText = error;
-			}
+			this.SubmitHandler();
 		});
 		
+		if (this.searchInput.value.trim().length > 0) {
+			this.SubmitHandler();
+		}
+		
+	},
+	
+	SubmitHandler: function () {
+		this.searchResults.innerText = '';
+		this.loadingSpinner.classList.remove('hidden');
+		try {
+			let searchInput = this.searchForm.querySelector('input[type=search]');
+			if (!searchInput) {
+				throw "No search input found. The search cannot continue.";
+			}
+			if (searchInput.value.length < 3) {
+				throw "The search string must be at least three characters long.";
+			}
+			this.Ajax({
+				url: `${this.searchForm.action}&q=${encodeURIComponent(searchInput.value)}`,
+				success: (response) => {
+					if (response.error) {
+						this.searchResults.innerText = response.error;
+					} else if (response instanceof Array) {
+						let output = '';
+						response.forEach(item => {
+							output += `${item.author}, ${item.title}<br>`;
+						});
+						if (output.length == 0) {
+							output = "No results...";
+						}
+						this.searchResults.innerHTML = output;
+					}
+					console.log(response);
+					this.loadingSpinner.classList.add('hidden');
+				},
+				fail: (statusText) => {
+					console.log(statusText);
+					this.loadingSpinner.classList.add('hidden');
+				},
+			});
+		} catch (error) {
+			this.loadingSpinner.classList.add('hidden');
+			this.searchResults.innerText = error;
+		}
 	},
 	
 	/*
@@ -86,18 +101,21 @@ var Program = {
 		}
 	*/
 	Ajax: function (config) {
+		
+
 		if (!(config instanceof Object)) {
-			throw "Program.Ajax requires a config object.";
+			throw "ArchiveProgram.Ajax requires a config object.";
 		}
 		if (typeof config.url !== "string" || config.url.length === 0) {
-			throw "Program.Ajax requires config.url to be specified.";
+			throw "ArchiveProgram.Ajax requires config.url to be specified.";
 		}
 		if (typeof config.success !== "function") {
-			throw "Program.Ajax requires a config.success callback.";
+			throw "ArchiveProgram.Ajax requires a config.success callback.";
 		}
 		if (typeof config.fail !== "function") {
 			config.fail = function () {};
 		}
+		
 		
 		let xhr = new XMLHttpRequest();
 		xhr.open("GET", config.url, true);
@@ -120,7 +138,7 @@ var Program = {
 
 
 
-Program.Start();
+ArchiveProgram.Start();
 
 /*
 JSON data structure of OAKS database response:

@@ -54,7 +54,7 @@ function case_oaks() {
 		echo json_encode(['error' => 'The search string must be at least three characters long.']);
 		return;
 	}
-	echo get_oaks_data($q);
+	echo json_encode(OakSearch::Instance()($q));
 }
 
 

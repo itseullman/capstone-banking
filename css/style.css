@@ -83,11 +83,14 @@ body > main {
 body > footer {
 	position: fixed;
 	bottom: 0;
-	padding: 20px;
+	padding: 5px;
 	width: 100%;
 	color: #ffffff;
 	background-color: #0a0d6f;
 	text-align: center;
+}
+body > footer p {
+	margin: 0;
 }
 
 
