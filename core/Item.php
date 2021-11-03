@@ -4,50 +4,74 @@ include_once(CORE_DIR . DIRECTORY_SEPARATOR . 'Oaks.php');
 
 class Item {
 	
+	
+	
+	// title	published_date	bib_text	origin_id	document_number	location_id	archive_number	comments	public_url	pdf_url	author
 	const TYPES = [
 		'item_id' => [
-			'INTEGER PRIMARY KEY AUTOINCREMENT',
-			SQLITE3_INTEGER
+			'create' => 'INTEGER PRIMARY KEY AUTOINCREMENT',
+			'insert' => SQLITE3_INTEGER,
+			'fk' => false,
 		],
 		'title' => [
-			'VARCHAR(500)',
-			SQLITE3_TEXT
+			'create' => 'VARCHAR(500)',
+			'insert' => SQLITE3_TEXT,
+			'fk' => false,
 		],
 		'published_date' => [
-			'VARCHAR(50)',
-			SQLITE3_TEXT
+			'create' => 'VARCHAR(50)',
+			'insert' => SQLITE3_TEXT,
+			'fk' => false,
 		],
 		'bib_text' => [
-			'VARCHAR(500)',
-			SQLITE3_TEXT
+			'create' => 'VARCHAR(500)',
+			'insert' => SQLITE3_TEXT,
+			'fk' => false,
 		],
 		'origin_id' => [
-			'INTEGER',
-			SQLITE3_INTEGER
+			'create' => 'INTEGER',
+			'insert' => SQLITE3_INTEGER,
+			'fk' => 'origin',
 		],
 		'document_number' => [
-			'VARCHAR(128)',
-			SQLITE3_TEXT
+			'create' => 'VARCHAR(128)',
+			'insert' => SQLITE3_TEXT,
+			'fk' => false,
 		],
 		'location_id' => [
-			'INTEGER',
-			SQLITE3_INTEGER
+			'create' => 'INTEGER',
+			'insert' => SQLITE3_INTEGER,
+			'fk' => 'location',
 		],
 		'archive_number' => [
-			'VARCHAR(128)',
-			SQLITE3_TEXT
+			'create' => 'VARCHAR(128)',
+			'insert' => SQLITE3_TEXT,
+			'fk' => false,
 		],
 		'comments' => [
-			'VARCHAR(500)',
-			SQLITE3_TEXT
+			'create' => 'VARCHAR(500)',
+			'insert' => SQLITE3_TEXT,
+			'fk' => false,
 		],
 		'public_url' => [
-			'VARCHAR(500)',
-			SQLITE3_TEXT
+			'create' => 'VARCHAR(500)',
+			'insert' => SQLITE3_TEXT,
+			'fk' => false,
 		],
 		'pdf_url' => [
-			'VARCHAR(500)',
-			SQLITE3_TEXT
+			'create' => 'VARCHAR(500)',
+			'insert' => SQLITE3_TEXT,
+			'fk' => false,
+		],
+		'author' => [
+			'create' => false,
+			'insert' => false,
+			'fk' => false,
+		],
+		'category' => [
+			'create' => false,
+			'insert' => false,
+			'fk' => false,
 		],
 	];
 	
@@ -63,11 +87,12 @@ class Item {
 	
 	private function __construct() {
 		$this->db = db();
+		/*
 		if ($this->Count('category') === -1) {
 			$this->InitCategory();
 		}
 		if ($this->Count('origin') === -1) {
-			$this->Initorigin();
+			$this->InitOrigin();
 		}
 		if ($this->Count('location') === -1) {
 			$this->InitLocation();
@@ -75,6 +100,7 @@ class Item {
 		if ($this->Count('author') === -1) {
 			$this->InitAuthor();
 		}
+		*/
 		if ($this->Count('item') === -1) {
 			$this->InitItem();
 		}
@@ -145,9 +171,13 @@ class Item {
 	}
 	
 	public function GetItems() {
-		$data = [];
-		$result = $this->db->query('SELECT title, published_date, bib_text, origin_id, document_number,
-			location_id, archive_number, comments, public_url, pdf_url FROM item');
+		$data = []; // GROUP_CONCAT(author.author_name)
+		$result = $this->db->query('SELECT item.title, item.published_date, item.bib_text,
+			item.origin_id, item.document_number, item.location_id, item.archive_number,
+			item.comments, item.public_url, item.pdf_url, GROUP_CONCAT(author.author_name) as authors FROM item
+			LEFT JOIN author_item on item.item_id = author_item.item_id
+			LEFT JOIN author on author_item.author_id = author.author_id
+			GROUP BY item.item_id');
 		if($result) {
 			while($row = $result->fetchArray(SQLITE3_ASSOC)) {
 				if ($row) {
@@ -182,129 +212,248 @@ class Item {
 		return $row_count;
 	}
 	
-	private function InitCategory() {
-		echo "<h3>Initializing category</h3>";
-		$this->InitNameIdEntity('category');
-	}
-	
-	private function Initorigin() {
-		echo "<h3>Initializing origin</h3>";
-		$this->InitNameIdEntity('origin');
-	}
-	
-	private function InitLocation() {
-		echo "<h3>Initializing location</h3>";
-		$this->InitNameIdEntity('location');
-	}
-	
-	private function InitAuthor() {
-		echo "<h3>Initializing author</h3>";
-		$this->InitNameIdEntity('author');
-	}
-	
 	private function InitItem() {
 		echo "<h3>Initializing Item</h3>";
-		$table_name = 'item';
-		$data = explode("\n", file_get_contents(DATA_DIR . DIRECTORY_SEPARATOR . $table_name . '.csv'));
-		$offset = 0;
-		$length = 25;
-		$drop_and_create = true;
+		$data = explode("\n", file_get_contents(DATA_DIR . DIRECTORY_SEPARATOR . 'item.csv'));
 		$headers = array_map('trim', explode("\t", array_shift($data)));
 		
 		$oakSearch = OakSearch::Instance();
 		$oakResults = $oakSearch();
 		foreach ($oakResults as $oakResult) {
-			$data[] = array_values($oakResult->ToItem());
+			$data[] = $oakResult->ToItem();
 		}
 		
+		$authors = [];
+		$categories = [];
+		$origins = [];
+		$locations = [];
+		$item_id = 1;
+		foreach ($data as $key => &$row) {
+			if (!is_array($row)) {
+				$row_values = array_map('trim', explode("\t", $row));
+				while(count($row_values) < count($headers)) {
+					$row_values[] = '';
+				}
+				$row = array_combine($headers, $row_values);
+			}
+			if (strlen($row['title']) == 0) {
+				unset($data[$key]);
+				continue;
+			}
+			$row['item_id'] = $item_id;
+			$item_id++;
+			if (!isset($row['author']) or strlen($row['author']) == 0) {
+				$row['author'] = [];
+			} else {
+				$row['author'] = explode(';', $row['author']);
+			}
+			foreach ($row['author'] as $author) {
+				if (strlen($author) == 0) {
+					continue;
+				}
+				$authors[$author] = $author;
+			}
+			if (!isset($row['category']) or strlen($row['category']) == 0) {
+				$row['category'] = [];
+			} else {
+				$row['category'] = explode(';', $row['category']);
+			}
+			foreach ($row['category'] as $category) {
+				if (strlen($category) == 0) {
+					continue;
+				}
+				$categories[$category] = $category;
+			}
+			if (!isset($row['origin_id'])) {
+				$row['origin_id'] = '';
+			} else if (!empty($row['origin_id'])) {
+				$origins[$row['origin_id']] = $row['origin_id'];
+			}
+			if (!isset($row['location_id'])) {
+				$row['location_id'] = '';
+			} else if (!empty($row['location_id'])) {
+				$locations[$row['location_id']] = $row['location_id'];
+			}
+		}
+		unset($row);
+		
+		// item_id should not be specified in
+		// the item.csv boostrap file.
+		$headers[] = 'item_id';
+		
+		$this->InitNameIdEntity('author', $authors);
+		$this->InitNameIdEntity('category', $categories);
+		$this->InitNameIdEntity('origin', $origins);
+		$this->InitNameIdEntity('location', $locations);
+		
+		$entityData = [
+			'category' => $this->GetNameIdEntity('category'),
+			'origin' => $this->GetNameIdEntity('origin'),
+			'location' => $this->GetNameIdEntity('location'),
+			'author' => $this->GetNameIdEntity('author'),
+			'category_item' => [],
+			'author_item' => [],
+		];
+		
+		$offset = 0;
+		$length = 25;
+		$drop_and_create = true;
 		while($offset < count($data)) {
-			$this->InitItem_(array_slice($data, $offset, $length), $headers, $drop_and_create);
+			$this->InitItem_(array_slice($data, $offset, $length), $headers, $drop_and_create, $entityData);
 			$drop_and_create = false;
 			$offset += $length;
 		}
+		
+		$this->InitJunctionIdEntity('category', $entityData['category_item']);
+		$this->InitJunctionIdEntity('author', $entityData['author_item']);
+		
 	}
 	
-	private function InitItem_($data, $headers, $drop_and_create) {
+	private function InitItem_($data, &$headers, $drop_and_create, &$entityData) {
+		static
+			$header_template = [],
+			$create_template = [],
+			$item_columns = [];
+		
 		$table_name = 'item';
-		$header_template = [];
-		$create_template = [];
-		$attribute_list = '';
-		foreach ($headers as $key => $header) {
-			$header_template[] = sprintf(':%s_%s_%%1$d', $table_name, $header);
-			if (!isset(self::TYPES[$header])) {
-				throw new Exception('The format of item.csv is incorrect.');
+		// after the first time we call InitItem,
+		// $header_template will be made into a string
+		// we reuse that data in subsequent invocations
+		// of this method.
+		if (!is_string($header_template)) {
+			foreach ($headers as $header) {
+				if (!isset(self::TYPES[$header])) {
+					throw new Exception('The format of item.csv is incorrect.');
+				} else if (self::TYPES[$header]['create'] === false) {
+					continue;
+				}
+				$header_template[] = sprintf(':item_%s_%%1$d', $header);
+				$create_template[] = sprintf('%s %s', $header, self::TYPES[$header]['create']);
+				$item_columns[] = $header;
 			}
-			$create_template[] = sprintf('%s %s', $header, self::TYPES[$header][0]);
+			$header_template = sprintf('(%s)', implode(', ', $header_template));
+			$create_template = sprintf('(%s)', implode(', ', $create_template));
+			$item_columns = implode(', ', $item_columns);
 		}
-		$header_template = sprintf('(%s)', implode(', ', $header_template));
-		$create_template = sprintf('(%s)', implode(', ', $create_template));
+		
 		$field_data = [];
 		$placeholders = [];
 		foreach ($data as $row_num => $row) {
-			if (!is_array($row)) {
-				$row = array_map('trim', explode("\t", $row));
-			}
 			$placeholders[] = sprintf($header_template, $row_num);
 			foreach ($row as $key => $field) {
-				$field_data[sprintf('%s_%s_%d', $table_name, $headers[$key], $row_num)] = $field;
+				$type_data = self::TYPES[$key];
+				if ($key == 'item_id') {
+					continue;
+				} else if ($type_data['create'] === false) {
+					if (count($field) > 0) {
+						foreach ($field as $field_item) {
+							foreach ($entityData[$key] as $entity_row) {
+								if ($entity_row[$key . '_name'] == $field_item) {
+									$entityData[$key . '_item'][$row['item_id']] = $entity_row[$key . '_id'];
+									break;
+								}
+							}
+						}
+						
+					}
+					continue;
+				} else if (is_string($type_data['fk'])) {
+					$fk = $type_data['fk'];
+					switch (null) {
+						default:
+						// ride the foreach loop until we find a match.
+						// If no match, then we null out $field.
+						foreach ($entityData[$fk] as $entityItem) {
+							if ($entityItem[$fk . '_name'] == $field) {
+								$field = $entityItem[$fk . '_id'];
+								break 2;
+							}
+						}
+						$field = null;
+					}
+				}
+				$field_data[sprintf('item_%s_%d', $key, $row_num)] = [
+					'value' => $field,
+					'key' =>$key,
+				];
 			}
 		}
 		
 		if ($drop_and_create) {
-			$this->db->exec(sprintf('DROP TABLE IF EXISTS %s', $table_name));
-			$this->db->exec(sprintf('CREATE TABLE %s %s', $table_name, $create_template));
+			$this->db->exec('DROP TABLE IF EXISTS item');
+			$this->db->exec(sprintf('CREATE TABLE item %s', $create_template));
 		}
-		$prepare_template = sprintf('INSERT INTO %s (%s) VALUES %s', $table_name,
-			implode(', ', $headers), implode(', ', $placeholders));
+		$prepare_template = sprintf('INSERT INTO item (%s) VALUES %s', $item_columns, implode(', ', $placeholders));
 		$stmt = $this->db->prepare($prepare_template);
-		foreach ($field_data as $key => $datum) {
-			if ($key === sprintf('%s_%s_id_%d', $table_name, $table_name, $key)) {
-				$stmt->bindValue($key, $datum, SQLITE3_INTEGER);
-			} else {
-				$stmt->bindValue($key, $datum, SQLITE3_TEXT);
-			}
+		foreach ($field_data as $placeholder => $datum) {
+			$stmt->bindValue($placeholder, $datum['value'], self::TYPES[$datum['key']]['insert']);
 		}
 		$stmt->execute();
 	}
 	
-	private function InitNameIdEntity($table_name) {
-		switch ($table_name) {
-			case 'category':
-			case 'origin':
-			case 'location':
-			case 'author':
-			$data = explode("\n", file_get_contents(DATA_DIR . DIRECTORY_SEPARATOR . $table_name . '.csv'));
-			// We don't need the headers. We put
-			// them in the .csv file to document
-			// what the fields are.
-			$headers = array_shift($data);
-			$texts = [];
-			$values = [];
-			$placeholders = [];
-			foreach ($data as $key => $datum) {
-				$datum = explode(',', $datum);
-				if (!isset($datum[1])) {
-					$datum[1] = 0; // default sort order
-				}
-				$placeholders[] = sprintf('(:%2$s_name_%1$d, :%2$s_order_%1$d)', $key, $table_name);
-				$texts[sprintf('%s_name_%d', $table_name, $key)] = $datum[0];
-				$values[sprintf('%s_order_%d', $table_name, $key)] = $datum[1];
-			}
+	private function InitNameIdEntity($table_name, $data) {
+		$texts = [];
+		$values = [];
+		$placeholders = [];
+		
+		$this->db->exec(sprintf('DROP TABLE IF EXISTS %s', $table_name));
+		$this->db->exec(sprintf('CREATE TABLE %1$s (%1$s_id INTEGER PRIMARY KEY AUTOINCREMENT, %1$s_name VARCHAR(200), %1$s_order INTEGER, UNIQUE(%1$s_name))', $table_name));
+		
+		if (count($data) < 1) {
+			return;
+		}
+		
+		$count = 1;
+		foreach ($data as $datum) {
+			$placeholders[] = sprintf('(:%2$s_name_%1$d, :%2$s_order_%1$d)', $count, $table_name);
+			$texts[sprintf('%s_name_%d', $table_name, $count)] = $datum;
+			$values[sprintf('%s_order_%d', $table_name, $count)] = 0;
+			$count++;
+		}
+		
+		$stmt = $this->db->prepare(sprintf('INSERT INTO %1$s (%1$s_name, %1$s_order) VALUES %2$s', $table_name, implode(', ', $placeholders)));
+		foreach ($texts as $key => $datum) {
+			$stmt->bindValue($key, $datum, SQLITE3_TEXT);
+		}
+		foreach ($values as $key => $datum) {
+			$stmt->bindValue($key, $datum, SQLITE3_INTEGER);
+		}
+		$result = $stmt->execute();
+	}
+	
+	private function InitJunctionIdEntity($part_name, $data) {
+		
+		$this->db->exec(sprintf('DROP TABLE IF EXISTS %s_item', $part_name));
+		$this->db->exec(sprintf('CREATE TABLE %1$s_item (%1$s_id INTEGER, item_id INTEGER, UNIQUE(%1$s_id, item_id))', $part_name));
+		
+		$values = [];
+		$placeholders = [];
+		$count = 1;
+		foreach ($data as $item_id => $datum) {
+			$placeholders[] = sprintf('(:%1$s_id_%2$d, :item_id_%2$d)', $part_name, $count);
+			$values[sprintf('%s_id_%d', $part_name, $count)] = $datum;
+			$values[sprintf('item_id_%d', $count)] = $item_id;
+			$count++;
+		}
+		
+		
+		$offset1 = 0;
+		$length1 = 25;
+		$offset2 = 0;
+		$length2 = 50;
+		while($offset1 < count($placeholders)) {
+			$placeholders_ = array_slice($placeholders, $offset1, $length1);
+			$values_ = array_slice($values, $offset2, $length2);
+			$offset1 += $length1;
+			$offset2 += $length2;
+		
 			
-			$this->db->exec(sprintf('DROP TABLE IF EXISTS %s', $table_name));
-			$this->db->exec(sprintf('CREATE TABLE %1$s (%1$s_id INTEGER PRIMARY KEY AUTOINCREMENT, %1$s_name VARCHAR(200), %1$s_order INT, UNIQUE(%1$s_name))', $table_name));
-			$stmt = $this->db->prepare(sprintf('INSERT INTO %1$s (%1$s_name, %1$s_order) VALUES %2$s', $table_name, implode(', ', $placeholders)));
-			foreach ($texts as $key => $datum) {
-				$stmt->bindValue($key, $datum, SQLITE3_TEXT);
-			}
-			foreach ($values as $key => $datum) {
+			$stmt = $this->db->prepare(sprintf('INSERT INTO %s_item (%s_id, item_id) VALUES %s', $part_name, $part_name, implode(', ', $placeholders_)));
+			foreach ($values_ as $key => $datum) {
 				$stmt->bindValue($key, $datum, SQLITE3_INTEGER);
 			}
-			$stmt->execute();
-			
-			default:
+			$result = $stmt->execute();
 		}
-
 	}
 	
 }
