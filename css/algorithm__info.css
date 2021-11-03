@@ -1,0 +1,62 @@
+/** 
+* Styles for each individual algorithms page
+*/
+
+.alg__info__root {
+  padding: 10px;
+  width: 100%;
+}
+
+.back__arrow__container {
+  width: 75px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.back__arrow__container img {
+  height: 50px;
+  width: 50px;
+  margin: 0;
+}
+
+.back__arrow__container p {
+  margin: -0.25rem 0 0 0;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.back__arrow__container:hover {
+  cursor: pointer;
+}
+
+.alg__info__content {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.alg__info__content iframe {
+  width: 90%;
+  max-width: 600px;
+  height: 320px;
+}
+
+.alg__info__content h1 {
+  font-weight: 300;
+  font-size: 2rem;
+  margin: 0 0 1rem 0;
+}
+
+.alg__info__content p {
+  font-size: 1.2rem;
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+}
