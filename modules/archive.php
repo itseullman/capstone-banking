@@ -62,7 +62,13 @@ foreach ($item->GetItems() as $row_num => $record) {
 		{$record['document_number']}
 		</td>
 		<td>
+		{$record['authors']}
+		</td>
+		<td>
 		{$record['comments']}
+		</td>
+		<td>
+		{$record['bib_text']}
 		</td>
 	</tr>
 	
@@ -112,7 +118,13 @@ echo <<<EOT
 		Document Number
 		</th>
 		<th>
+		Author(s)
+		</th>
+		<th>
 		Comments
+		</th>
+		<th>
+		Bib. Text
 		</th>
 	</tr>
 $item_list
