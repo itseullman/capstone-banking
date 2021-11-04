@@ -60,3 +60,54 @@ a {
   max-width: 600px;
   text-align: center;
 }
+
+.alg__pseudo__content h2 {
+  font-weight: 300;
+  font-size: 2rem;
+  margin: 0 0 1rem 0;
+}
+
+/**
+* Pseudo-code styles
+*/
+.pseudo__container {
+  background-color: #dcd9dc;
+  padding: 20px;
+  border-radius: 5px;
+  overflow: scroll;
+}
+
+.pseudo__line {
+  width: 100%;
+  margin-bottom: 1px;
+}
+
+.line__number {
+  margin-right: 1rem;
+  color: darkgray;
+}
+
+.pseudo__line p {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.variable {
+  color: #5684ff;
+}
+
+.method {
+  color: #9a9c12;
+}
+
+.comment {
+  color: #42935b;
+}
+
+.key_word {
+  color: #d63ef4;
+}
+
+.type {
+  color: #00cb31;
+}
