@@ -22,5 +22,73 @@
       network. The resulting sorting networks consist of O(n log<sup>2</sup>(n))
       comparators and have a delay of O(log<sup>2</sup>(n)).
     </p>
-  </div>  
+  </div>
+  <div class="alg__pseudo__content">
+    <h2>Pseudocode:</h2>
+    <div class="pseudo__container">
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">1</span>
+          <span class="key_word">for</span> ( <span class="variable">k</span> =
+          2; <span class="variable">k</span> <= <span class="variable">n</span>;
+          <span class="variable">k</span> * =2 )
+          <span class="comment">// k is doubled every iteration</span>
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">2</span>&nbsp; &nbsp;
+          <span class="key_word">for</span> ( <span class="variable">j</span> =
+          <span class="variable">k</span> / 2; <span class="variable">j</span> >
+          0; <span class="variable">j</span> /= 2 )
+          <span class="comment"> // j is halved every iteration</span>
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">3</span>&nbsp; &nbsp; &nbsp; &nbsp;
+          <span class="key_word">for</span>
+          ( <span class="variable">i</span> = 0;
+          <span class="variable">i</span> < <span class="variable">n</span>;
+          <span class="variable">i</span>++ )
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">4</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          &nbsp; <span class="variable">l</span> =
+          <span class="variable">i</span> ^ <span class="variable">j</span>
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">3</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          &nbsp; <span class="key_word">if</span> (
+          <span class="variable">l</span> > <span class="variable">i</span> )
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">4</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          &nbsp; &nbsp; &nbsp; <span class="key_word">if</span> ( (
+          <span class="variable">i</span> ^ <span class="variable">k</span> == 0
+          <span class="operator">AND</span> <span class="type">arr</span>[
+          <span class="variable">i</span> ] > <span class="type">arr</span>[
+          <span class="variable">l</span> ]) <span class="operator">OR</span> (
+          <span class="variable">i</span> ^ <span class="variable">k</span> != 0
+          <span class="operator">AND</span> <span class="type">arr</span>[
+          <span class="variable">i</span> ] < <span class="type">arr</span>[
+          <span class="variable">l</span> ]) )
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">5</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; swap the elements in
+          <span class="type">arr</span>[ <span class="variable">i</span> ] and
+          <span class="type">arr</span>[ <span class="variable">l</span> ]
+        </p>
+      </div>
+    </div>
+  </div>
 </div>

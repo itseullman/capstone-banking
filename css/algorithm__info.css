@@ -109,5 +109,9 @@ a {
 }
 
 .type {
-  color: #00cb31;
+  color: #cd0006;
+}
+
+.operator {
+  color: #8f5900;
 }
