@@ -17,12 +17,81 @@
       allowfullscreen
     ></iframe>
     <p>
-      Batcher's odd–even mergesort is a generic construction devised by Ken
-      Batcher for sorting networks of size O(n (log n)<sup>2</sup>) and depth
-      O((log n)<sup>2</sup>), where n is the number of items to be sorted.
-      Although it is not asymptotically optimal, Knuth concluded in 1998, with
-      respect to the AKS network that "Batcher's method is much better, unless n
-      exceeds the total memory capacity of all computers on earth!"
+      The odd-even merge sort algorithm is one of the two well-known parallel
+      sorting algorithms developed by Dr. Batcher. It is based on a merge
+      algorithm that merges two sorted halves of a sequence to a completely
+      sorted sequence. However, the odd-even merge sort is not data dependent.
+      This makes it possible to implement the algorithm as a sorting network.
+      While the algorithm is not asymptotically optimal, Donald Knuth has
+      concluded that compared to the AKS network, “Batcher’s method is much
+      better, unless n exceeds the total memory capacity of all computers on
+      earth!”
     </p>
+  </div>
+  <div class="alg__pseudo__content">
+    <h2>Pseudocode:</h2>
+    <div class="pseudo__container">
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">1</span>
+          <span class="key_word">for </span> <span class="variable">p</span> = 1
+          ... <span class="variable">n</span> - 1
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">2</span>
+          <span class="key_word">&nbsp; &nbsp;for </span>
+          <span class="variable">k</span> = <span class="variable">p</span>,
+          <span class="variable">p</span>/2, <span class="variable">p</span>/4,
+          <span class="variable">p</span>/8 ...
+          <span class="comment">// As long as k >= 1</span>
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">3</span>&nbsp; &nbsp; &nbsp; &nbsp;
+          <span class="key_word">for</span> <span class="varialbe">j</span> =
+          <span class="method">mod</span>(<span class="variable">k</span>,
+          <span class="variable">p</span>) ... (<span class="variable">n</span>
+          - 1 - <span class="variable">k</span>)
+          <span class="comment">// With a step size of 2k</span>
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">4</span>
+          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          <span class="key_word">for</span> <span class="variable">i</span> = 0
+          ... <span class="method">min</span>(<span class="variable">k</span> -
+          1, <span class="variable">n</span> - <span class="variable">j</span> -
+          <span class="variable">k</span> - 1)
+          <span class="comment"> // With a step size of 1</span>
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">5</span>
+          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          <span class="key_word">if</span>
+          <span class="method">floor</span>((<span class="variable">i</span> +
+          <span class="variable">j</span>) / (<span class="variable">p</span> *
+          2)) == <span class="method">floor</span>((<span class="variable"
+            >i</span
+          >
+          + <span class="variable">j</span> + <span class="variable">k</span>) /
+          (<span class="variable">p</span> * 2))
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">6</span>
+          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          compare and sort elements (<span class="variable">i</span> +
+          <span class="variable">j</span>) and (<span class="variable">i</span>
+          + <span class="variable">j</span> + <span class="variable">k</span>)
+        </p>
+      </div>
+    </div>
   </div>
 </div>

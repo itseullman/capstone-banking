@@ -17,11 +17,78 @@
       allowfullscreen
     ></iframe>
     <p>
-      Bitonic mergesort is a parallel algorithm for sorting. It is also used as
-      a construction method for building a sorting network. The algorithm was
-      devised by Ken Batcher. The resulting sorting networks consist of O(n
-      log<sup>2</sup>(n)) comparators and have a delay of O(n
-      log<sup>2</sup>(n)), where n is the number of items to be sorted.
+      The bitonic merge sort is a parallel algorithm for sorting devised by Dr.
+      Batcher. It can be used as a construction method to build a sorting
+      network. The resulting sorting networks consist of O(n log<sup>2</sup>(n))
+      comparators and have a delay of O(log<sup>2</sup>(n)).
     </p>
+  </div>
+  <div class="alg__pseudo__content">
+    <h2>Pseudocode:</h2>
+    <div class="pseudo__container">
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">1</span>
+          <span class="key_word">for</span> ( <span class="variable">k</span> =
+          2; <span class="variable">k</span> <= <span class="variable">n</span>;
+          <span class="variable">k</span> * =2 )
+          <span class="comment">// k is doubled every iteration</span>
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">2</span>&nbsp; &nbsp;
+          <span class="key_word">for</span> ( <span class="variable">j</span> =
+          <span class="variable">k</span> / 2; <span class="variable">j</span> >
+          0; <span class="variable">j</span> /= 2 )
+          <span class="comment"> // j is halved every iteration</span>
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">3</span>&nbsp; &nbsp; &nbsp; &nbsp;
+          <span class="key_word">for</span>
+          ( <span class="variable">i</span> = 0;
+          <span class="variable">i</span> < <span class="variable">n</span>;
+          <span class="variable">i</span>++ )
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">4</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          &nbsp; <span class="variable">l</span> =
+          <span class="variable">i</span> ^ <span class="variable">j</span>
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">3</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          &nbsp; <span class="key_word">if</span> (
+          <span class="variable">l</span> > <span class="variable">i</span> )
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">4</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          &nbsp; &nbsp; &nbsp; <span class="key_word">if</span> ( (
+          <span class="variable">i</span> ^ <span class="variable">k</span> == 0
+          <span class="operator">AND</span> <span class="type">arr</span>[
+          <span class="variable">i</span> ] > <span class="type">arr</span>[
+          <span class="variable">l</span> ]) <span class="operator">OR</span> (
+          <span class="variable">i</span> ^ <span class="variable">k</span> != 0
+          <span class="operator">AND</span> <span class="type">arr</span>[
+          <span class="variable">i</span> ] < <span class="type">arr</span>[
+          <span class="variable">l</span> ]) )
+        </p>
+      </div>
+      <div class="pseudo__line">
+        <p>
+          <span class="line__number">5</span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; swap the elements in
+          <span class="type">arr</span>[ <span class="variable">i</span> ] and
+          <span class="type">arr</span>[ <span class="variable">l</span> ]
+        </p>
+      </div>
+    </div>
   </div>
 </div>
