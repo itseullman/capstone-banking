@@ -61,20 +61,25 @@ a {
   text-align: center;
 }
 
+/**
+* Pseudo-code styles
+*/
+
+.alg__pseudo__content {
+  overflow: scroll;
+}
+
 .alg__pseudo__content h2 {
   font-weight: 300;
   font-size: 2rem;
   margin: 0 0 1rem 0;
 }
 
-/**
-* Pseudo-code styles
-*/
 .pseudo__container {
   background-color: #dcd9dc;
   padding: 20px;
   border-radius: 5px;
-  overflow: scroll;
+  min-width: 800px;
 }
 
 .pseudo__line {
@@ -84,7 +89,7 @@ a {
 
 .line__number {
   margin-right: 1rem;
-  color: darkgray;
+  color: #8e8e93;
 }
 
 .pseudo__line p {
@@ -114,4 +119,71 @@ a {
 
 .operator {
   color: #8f5900;
+}
+
+/**
+* Reference styles
+*/
+.alg__references__container {
+  margin-top: 3rem;
+}
+
+.alg__references__container h2 {
+  font-weight: 300;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.alg__references__info {
+  font-size: 1.25rem;
+  margin: 10px 0 1rem 0;
+  width: 95%;
+  max-width: 500px;
+  color: #8e8e93;
+}
+
+.reference {
+  display: flex;
+  align-items: center;
+
+  width: 95%;
+  max-width: 900px;
+
+  margin: 1.5rem auto;
+  padding: 10px;
+
+  box-shadow: 1px 1px 12px darkgray;
+  border-radius: 5px;
+
+  transition: ease-in 0.2s;
+}
+
+.reference:hover {
+  transform: scale(1.1);
+}
+
+.reference img {
+  height: 100px;
+  width: 100px;
+  margin-right: 1rem;
+}
+
+.reference__info h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+
+.reference__info h4 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.reference__info p {
+  font-size: 1rem;
+  margin: 5px 0 0 0;
+
+  color: #8e8e93;
 }
