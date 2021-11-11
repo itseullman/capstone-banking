@@ -187,3 +187,16 @@ a {
 
   color: #8e8e93;
 }
+
+@media screen and (max-width: 825px) {
+  .reference {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .reference img,
+  .reference h4 {
+    margin-bottom: 1rem;
+  }
+}
