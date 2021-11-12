@@ -38,9 +38,57 @@ switch (REQUEST_ACTION) {
 	case_oaks();
 	break;
 	
+	case 'search':
+	isAjax(true);
+	case_search();
+	break;
+	
+	
 	default:
 	echo "case 'default' not implemented yet.";
 	break;
+}
+
+
+function case_search() {
+	
+	
+	
+	$valid_types = [
+		'title',
+		'author',
+		'comments',
+		'document_number',
+	];
+	
+	include_once(CORE_DIR . DIRECTORY_SEPARATOR . 'Item.php');
+	
+	$search_fields = ['w','x','y','z'];
+	$searches = [];
+	foreach ($search_fields as $search_field) {
+		if (isset($_REQUEST[$search_field])) {
+			$value = trim($_REQUEST[$search_field]);
+			if (strlen($value) > 0) {
+				$type = 'title';
+				if (isset($_REQUEST[$search_field. '-type']) && in_array($_REQUEST[$search_field. '-type'], Item::VALID_SEARCH_TYPES)) {
+					$type = $_REQUEST[$search_field . '-type'];
+				}
+				$searches[] = [
+					'value' => $value,
+					'type' => $type,
+				];
+			}
+		}
+	}
+	
+	if (!isset($_REQUEST['logic']) or $_REQUEST['logic'] != 'and') {
+		$logic = 'or';
+	} else {
+		$logic = 'and';
+	}
+	
+	$item = Item::Instance();
+	echo json_encode(['items' => $item->GetItems($searches, $logic)]);
 }
 
 

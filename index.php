@@ -126,26 +126,26 @@ function isAjax($foo = null) {
 	secure it against SQL injection.
 */
 function stringReplacements($page, $string) {
-	$db = db();
-	// Need two percent signs inside of sprintf because % is a control
-	// character in sprintf. The first % escapes the second one.
-	//
-	// Note that REQUEST_PAGE is safe to inject into the query. The logic of how REQUEST_PAGE
-	// is defined limits the possible values to known and predifined possibilities.
-	$result = $db->query(sprintf('SELECT tag_name, text FROM strings WHERE lang = "en-US" and tag_name LIKE ("%s-%%")', REQUEST_PAGE));
-	if ($result instanceof SQLite3Result) {
-		$search = [];
-		$replace = [];
-		while ($item = $result->fetchArray(SQLITE3_ASSOC)) {
-			$search[] = sprintf('{{%s}}', $item['tag_name']);
-			$replace[] = $item['text'];
-		}
-		$string = str_replace(
-			$search,
-			$replace, 
-			$string
-		);
-	}
+	//$db = db();
+	//// Need two percent signs inside of sprintf because % is a control
+	//// character in sprintf. The first % escapes the second one.
+	////
+	//// Note that REQUEST_PAGE is safe to inject into the query. The logic of how REQUEST_PAGE
+	//// is defined limits the possible values to known and predifined possibilities.
+	//$result = $db->query(sprintf('SELECT tag_name, text FROM strings WHERE lang = "en-US" and tag_name LIKE ("%s-%%")', REQUEST_PAGE));
+	//if ($result instanceof SQLite3Result) {
+	//	$search = [];
+	//	$replace = [];
+	//	while ($item = $result->fetchArray(SQLITE3_ASSOC)) {
+	//		$search[] = sprintf('{{%s}}', $item['tag_name']);
+	//		$replace[] = $item['text'];
+	//	}
+	//	$string = str_replace(
+	//		$search,
+	//		$replace, 
+	//		$string
+	//	);
+	//}
 	return $string;
 }
 

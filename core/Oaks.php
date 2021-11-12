@@ -139,7 +139,7 @@ class OakResult implements JsonSerializable {
 			'bib_text' => '',
 			'origin_id' => null,
 			'document_number' => '',
-			'location_id' => 'oaks',
+			'location_id' => 'OAKS',
 			'archive_number' => $this->id_,
 			'comments' => '',
 			'public_url' => $this->public_url_,
