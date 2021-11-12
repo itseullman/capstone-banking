@@ -21,7 +21,7 @@ var ArchiveProgram = {
 	
 	searchTypes: {},
 	
-	searchResults: null,
+	searchFeedback: null,
 	
 	loadingSpinner: null,
 	
@@ -53,7 +53,6 @@ var ArchiveProgram = {
 					case 'z': savedSearchType = 'document_number'; break;
 					default:
 				}
-				
 			}
 			
 			for (let option of this.searchTypes[index].options) {
@@ -66,8 +65,8 @@ var ArchiveProgram = {
 			});
 		});
 			
-		this.searchResults = this.page.querySelector('.ajax-response');
-		if (!this.searchResults) {
+		this.searchFeedback = this.page.querySelector('.ajax-error-response');
+		if (!this.searchFeedback) {
 			throw "The page structure has been broken. No search results element was found.";
 		}
 		
@@ -89,6 +88,7 @@ var ArchiveProgram = {
 			}
 		});
 		
+		this.Stats.Initialize();
 		this.SearchLogic.Initialize();
 		this.Data.Initialize();
 		this.Filter.Initialize();
@@ -110,6 +110,29 @@ var ArchiveProgram = {
 			});
 			this.SubmitHandler();
 		});
+	},
+	
+	Stats: {
+		Container: null,
+		
+		Initialize: function () {
+			this.Container = ArchiveProgram.page.querySelector('.search-results-stats');
+			if (!this.Container) {
+				throw "The page structure has been broken. No search results stats container was found.";
+			}
+		},
+		
+		Total: function (num) {
+			this.Container.querySelector('.search-results-total').innerText = num;
+		},
+		
+		Hidden: function (num) {
+			this.Container.querySelector('.search-results-hidden').innerText = num;
+		},
+		
+		Visible: function (num) {
+			this.Container.querySelector('.search-results-visible').innerText = num;
+		},
 	},
 	
 	SearchLogic: {
@@ -457,6 +480,7 @@ var ArchiveProgram = {
 				resultsContent += this.NewRow(item);
 				
 			});
+			ArchiveProgram.Stats.Total(items.length);
 			this.container.querySelector('.search-results-content').innerHTML = resultsContent;
 			ArchiveProgram.Filter.Checks.Reset();
 			ArchiveProgram.Filter.RowToggles.ReFilter();
@@ -552,7 +576,7 @@ var ArchiveProgram = {
 				url: `${this.searchForm.action}${q}`,
 				success: (response) => {
 					if (response.error) {
-						this.searchResults.innerText = response.error;
+						this.searchFeedback.innerText = response.error;
 					} else if (response instanceof Object) {
 						
 						if (response.items && response.items instanceof Array) {
@@ -569,7 +593,7 @@ var ArchiveProgram = {
 			});
 		} catch (error) {
 			this.loadingSpinner.classList.add('hidden');
-			this.searchResults.innerText = error;
+			this.searchFeedback.innerText = error;
 		}
 	},
 	
