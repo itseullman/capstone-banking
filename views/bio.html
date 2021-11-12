@@ -1,19 +1,93 @@
-<link rel="stylesheet" href="../css/biography.css" />
-<script src="../scripts/biography.js" defer></script>
+<!DOCTYPE html>
+<html>
+<head>
 
-<ul class="tabs">
-  <li data-tab-target="#introduction" class="active tab">Introduction</li>
-  <li data-tab-target="#early-life" class="tab">Early Life</li>
-  <li data-tab-target="#education" class="tab">Education</li>
-  <li data-tab-target="#career" class="tab">Career</li>
-  <li data-tab-target="#contributions" class="tab">Contributions</li>
-  <li data-tab-target="#awards" class="tab">Awards</li>
-  <li data-tab-target="#late-life" class="tab">Late Life</li>
+
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<meta name="description" content="To Memorialize the life and work of Kenneth E. Batcher">
+	<meta name="keywords" content="Ken Batcher, Kenneth E. Batcher, MPP, Massively Parallel Processor, bitonic, Biography">
+	<meta name="author" content="Luke Sabo">
+	<title>Ken Batcher Memorial Archive | Biography</title>
+	<link rel="stylesheet" href="../css/style.css">
+	<script src="../scripts/biography.js" defer></script>
+
+	<script>
+		function show(shown, hidden) {
+			document.getElementById(shown).style.display='block';
+			document.getElementById(hidden).style.display='none';
+			return false;
+		}
+	</script>
+
+
+	<style>
+	body {
+	  margin: 0;
+	}
+	header {
+	  display: block;
+	}
+	ul {
+	  list-style-type: none;
+	  margin: 0;
+	  padding: 0;
+	  width: 25%;
+	  background-color: #f1f1f1;
+	  position: fixed;
+	  height: 100%;
+	  overflow: auto;
+	}
+
+	li a {
+	  display: block;
+	  color: #000;
+	  padding: 8px 16px;
+	  text-decoration: none;
+	}
+
+	li a.active {
+	  background-color: #04AA6D;
+	  color: white;
+	}
+
+
+	</style>
+</head>
+
+<body>
+
+
+<header>
+	<div class="container">
+		<div id="welcome">
+			<h1><span class="highlight">Ken Batcher</span> Memorial Archive</h1>
+		</div>
+		<nav>
+			<ul>
+				<li><a href="index.html">Home</a></li>
+				<li class="current"><a href="bio.html">Biography</a></li>
+				<li><a href="archive.html">Temporary Archive</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<ul>
+  <li><a class="active" href="#introduction">Introduction</a></li>
+  <li><a href="#early-life">Early Life</a></li>
+  <li><a href="#education">Educationt</a></li>
+  <li><a href="#career">Career</a></li>
+  <li><a href="#contributions">Contributions</a></li>
+  <li><a href="#awards">Awards</a></li>
+  <li><a href="#late-life">Late Life</a></li>
 </ul>
 
-<div class="tab-content">
-  <div id="introduction" data-tab-content>
-    <h1>Introduction</h1>
+
+<div style="margin-left:25%;padding:1px 16px;height:1000px;">
+  <div id="introduction">
+    <h1 align="center">Introduction</h1>
     <p>
       “The Russians saved me!” laughed Dr. Johnnie Baker as he regaled me with
       the tales of his foundations in Computer Science, in a small conference
@@ -38,8 +112,9 @@
     <p>
       Kenneth E. Batcher was born on December 27, 1935. Raised in the borough of
       Queens, New York City, he would never quite like the way of life in the
-      city. Coming from a lineage of science and electronics, his father, Ralph
-      R. Batcher was an early pioneer in the world of television, penning a
+      city. Coming from a lineage of science and electronics, his father,
+			<a href = "https://www.earlytelevision.org/batcher_articles.html" target = "_blank">Ralph R. Batcher</a>
+			 was an early pioneer in the world of television, penning a
       column in the New York Sun for hobbyists to build their own versions of
       tube TVs. Graduating with a degree in Radio Engineering (Universities
       didn’t commonly offer electrical engineering degrees yet!) he spent both
@@ -51,20 +126,40 @@
       this environment where Ken’s mind was fostered and able to flourish.
     </p>
   </div>
-  <div id="early-life" data-tab-content>
-    <h1>Early Life</h1>
-    <p>A description of Dr. Batcher's upbringing.</p>
+  <div id="early-life">
+		<h1 align="center">Early Life</h1>
+
+	<p>
+		Ken Batcher was born in December 1935 in Queens, New York City to Louis and
+		Ralph Batcher.His parents met at Iowa State University and later relocated to New York City after graduation.
+		His father, Ralph R. Batcher, was the Chief Engineer of The A. H. Grebe Radio Company until its bankruptcy in 1932.
+
+	</P>
   </div>
-  <div id="education" data-tab-content>
-    <h1>Education</h1>
-    <p>Outline of Dr. Batcher's education.</p>
+  <div id="education">
+		<h1 align="center">Education</h1>
+		<p>Batcher graduated from Iowa State University with B.E. degree in 1957. In 1964,
+			Batcher received his Ph.D. in electrical engineering from the University of Illinois.</p>
+		<p align="center">
+			1953 High School Diploma - <a href = "http://www.bths.edu/" target = "_blank">Brooklyn Technical High School, Brooklyn, NY</a>.</p>
+			<p align="center">
+			1957 B.S.E.E. - <a href = "http://www.iastate.edu/" target = "_blank">Iowa State University, Ames, IA</a></p>
+			<p align="center">
+			1962 M.S. - <a href = "http://www.uiuc.edu/" target = "_blank">University of Illinois, Urbana-Champaign, IL</a></p>
+			<p align="center">
+			1964 Ph.D. - <a href = "http://www.uiuc.edu/" target = "_blank">University of Illinois, Urbana-Champaign, IL</a></p>
+
+		</p>
   </div>
-  <div id="career" data-tab-content>
-    <h1>Career</h1>
-    <p>A description of Dr. Batcher's career path.</p>
+  <div id="career">
+		<h1 align="center">Career</h1>
+		<p>
+			He worked for Goodyear Aerospace as a Computer Engineer and later as a professor at Kent State University (since 1989). 
+
+		</p>
   </div>
-  <div id="contributions" data-tab-content>
-	<h1>Contributions</h1>
+  <div id="contributions">
+	<h1 align="center">Contributions</h1>
 	<p>
 	  Dr. Kenneth E. Batcher was a figurehead in the field of Computer
 	  Science. He made numerous contributions and has left a lasting web of
@@ -133,7 +228,7 @@
 
 	<p>
 	  Throughout his career, Dr. Batcher invented and co-invented 14 U.S.
-	  patents: 
+	  patents:
 	  <ul>
 		<li>3,183,363 Logic Mechanization System 1965 (multiple inventors)</li>
 		<li>3,300,762 Multiple Response Resolver Apparatus 1967</li>
@@ -157,57 +252,64 @@
 	</p>
 
   </div>
-  <div id="awards" data-tab-content>
-	<h1>Awards</h1>
+  <div id="awards">
+	<h1 align="center">Awards</h1>
 	<h2>Arnstein Award - 1980</h2>
 	<p>
-	  Presented by Goodyear Aerospace Corporation for technical achievement. 
-	</br>
+	  Presented by Goodyear Aerospace Corporation for technical achievement.
+	<br/>
 	  [Faculty Site]
 	</p>
 
 	<h2>Eckert-Mauchly Award - 1990</h2>
 	<p>
-	  “For contributions to parallel computer architecture, both for pioneering theories in 
-	  interconnection networks and for the pioneering implementations of parallel computers.” 
-	</br>
+	  “For contributions to parallel computer architecture, both for pioneering theories in
+	  interconnection networks and for the pioneering implementations of parallel computers.”
+	<br/>
 	  [IEEE]
 	</p>
 
 	<h2>Seymour Cray Award - 2007</h2>
 	<p>
-	  “For fundamental theoretical and practical contributions to massively parallel computation, 
-	  including parallel sorting algorithms, interconnection networks, 
+	  “For fundamental theoretical and practical contributions to massively parallel computation,
+	  including parallel sorting algorithms, interconnection networks,
 	  and pioneering designs, of the STARAN and MPP computers.”
-	  </br>
+	  <br/>
 	  [IEEE]
 	</p>
 
 	<h2>Test of Time Award - 2021</h2>
 	<p>
-	  “Dr. Kenneth Batcher has recently received another award for his research. 
-	  The International Conference for Parallel Processing (ICPP) had its fiftieth 
-	  meeting about a month ago. They had a committee of several of their more 
-	  distinguished members to review all the research papers that had been accepted 
-	  for presentation at ICPP. Only three papers were selected to receive their 
+	  “Dr. Kenneth Batcher has recently received another award for his research.
+	  The International Conference for Parallel Processing (ICPP) had its fiftieth
+	  meeting about a month ago. They had a committee of several of their more
+	  distinguished members to review all the research papers that had been accepted
+	  for presentation at ICPP. Only three papers were selected to receive their
 	  "Test of Time" award.”
-	</br>
+	<br/>
 	  [Email]
 	</p>
   </div>
-  <div id="late-life" data-tab-content>
-	<h1>Late Life</h1>
+  <div id="late-life">
+	<h1 align="center">Late Life</h1>
 	<p>
-	  Dr. Kenneth Edward Batcher passed away in Stow, Ohio on August 22, 2019. 
-	  Ken was 83 years old when he passed, and per his wishes, his body was donated 
-	  to the Northeast Ohio Medical University to help further medical scientific 
-	  studies. His obituary can be found on the Akron Beacon Journal website, where 
+	  Dr. Kenneth Edward Batcher passed away in Stow, Ohio on August 22, 2019.
+	  Ken was 83 years old when he passed, and per his wishes, his body was donated
+	  to the Northeast Ohio Medical University to help further medical scientific
+	  studies. His obituary can be found on the Akron Beacon Journal website, where
 	  contributions can also be made in his memory to the Department of Anatomy and Neurobiology.
 	</p>
 
 	<p>
-	  He is survived by his wife, Slyvia Batcher; his daughter, Joan Booth; his son, Kenneth W. Batcher; 
+	  He is survived by his wife, Slyvia Batcher; his daughter, Joan Booth; his son, Kenneth W. Batcher;
 	  his grandchildren, Joshua, Lenora, Victoria, and Noah Batcher; and his brother, Noah Batcher.
 	</p>
   </div>
 </div>
+
+
+<footer>
+	<p>Kent State University, Copyright &copy; 2021</p>
+</footer>
+</body>
+</html>
