@@ -171,7 +171,14 @@ echo <<<EOT
 $select_dropdowns
 		</div>
 	</div>
-	<div class="ajax-response"></div>
+	<div class="ajax-error-response"></div>
+	
+	<div class="search-results-stats">
+		<div>Search Stats</div>
+		<span>Total: </span><span class="search-results-total"></span>
+		<span>Hidden: </span><span class="search-results-hidden"></span>
+		<span>Visible: </span><span class="search-results-visible"></span>
+	</div>
 
 	<table class="search-results-container">
 		<thead>
