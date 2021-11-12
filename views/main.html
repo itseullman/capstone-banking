@@ -32,5 +32,14 @@
 <footer>
 	<p>Kent State University, Copyright &copy; 2020 to {{curr_year}}</p>
 </footer>
+<script>
+document.body.addEventListener('click', event => {
+	if (event.target.classList.contains('external-link')) {
+		if (!confirm(`The following link connects to an external resource. Please confirm your choice to navigate to this URL: ${event.target.href}`)) {
+			event.preventDefault();
+		}
+	}
+});
+</script>
 </body>
 </html>

@@ -4,6 +4,12 @@ include_once(CORE_DIR . DIRECTORY_SEPARATOR . 'Oaks.php');
 
 class Item {
 	
+	const SELECT_LABELS = [
+		'category' => 'Categories',
+		'origin' => 'Produced By',
+		'location' => 'Location',
+		'author' => 'Authors',
+	];
 	
 	
 	// title	published_date	bib_text	origin_id	document_number	location_id	archive_number	comments	public_url	pdf_url	author
@@ -75,6 +81,12 @@ class Item {
 		],
 	];
 	
+	const VALID_SEARCH_TYPES = 	[
+		'title',
+		'comments',
+		'document_number',
+	]; 
+	
 	static public function Instance() {
 		static $instance = null;
 		if (is_null($instance)) {
@@ -87,20 +99,6 @@ class Item {
 	
 	private function __construct() {
 		$this->db = db();
-		/*
-		if ($this->Count('category') === -1) {
-			$this->InitCategory();
-		}
-		if ($this->Count('origin') === -1) {
-			$this->InitOrigin();
-		}
-		if ($this->Count('location') === -1) {
-			$this->InitLocation();
-		}
-		if ($this->Count('author') === -1) {
-			$this->InitAuthor();
-		}
-		*/
 		if ($this->Count('item') === -1) {
 			$this->InitItem();
 		}
@@ -133,30 +131,57 @@ class Item {
 	//	return false;
 	//}
 	
-	public function GetCategories() {
-		return $this->GetNameIdEntity('category');
+	public function GetCategories($orderby = 'name') {
+		return $this->GetNameIdEntity('category', $orderby);
 	}
 	
-	public function GetOrigins() {
-		return  $this->GetNameIdEntity('origin');
+	public function GetOrigins($orderby = 'name') {
+		return  $this->GetNameIdEntity('origin', $orderby);
 	}
 	
-	public function GetLocations() {
-		return  $this->GetNameIdEntity('location');
+	public function GetLocations($orderby = 'name') {
+		return  $this->GetNameIdEntity('location', $orderby);
 	}
 	
-	public function GetAuthors() {
-		return  $this->GetNameIdEntity('author');
+	public function GetAuthors($orderby = 'name') {
+		return  $this->GetNameIdEntity('author', $orderby);
 	}
 	
-	private function GetNameIdEntity($table_name) {
+	public function GetCOLA() {
+		return [
+			'category' => $this->GetCategories(),
+			'origin' => $this->GetOrigins(),
+			'location' => $this->GetLocations(),
+			'author' => $this->GetAuthors(),
+		];
+	}
+	
+	public function GetNameIdEntity($table_name, $orderby = 'name') {
 		$data = [];
+		$order_clause = '';
+		
+		switch ($orderby) {
+			case 'id':
+			$order_clause = 'ORDER BY %s_id';
+			break;
+			
+			case 'order':
+			$order_clause = 'ORDER BY %s_order';
+			break;
+			
+			case 'name':
+			default:
+			$order_clause = 'ORDER BY %s_name';
+			break;
+		}
+		
 		switch ($table_name) {
 			case 'category':
 			case 'origin':
 			case 'location':
 			case 'author':
-			$result = $this->db->query(sprintf('SELECT %1$s_id, %1$s_name, %1$s_order FROM %1$s', $table_name));
+			$order_clause = sprintf($order_clause, $table_name);
+			$result = $this->db->query(sprintf('SELECT %1$s_id, %1$s_name, %1$s_order FROM %1$s %2$s', $table_name, $order_clause));
 			if($result) {
 				while($row = $result->fetchArray(SQLITE3_ASSOC)) {
 					if ($row) {
@@ -170,14 +195,41 @@ class Item {
 		return $data;
 	}
 	
-	public function GetItems() {
+	public function GetItems($searches = [], $logic = 'or') {
+		if ($logic != 'and') {
+			$logic = 'or';
+		}
+		
+		$where = [];
+		if (count($searches) > 0) {
+			foreach($searches as $search) {
+				if (in_array($search['type'], self::VALID_SEARCH_TYPES)) {
+					$where[] = sprintf('item.%s LIKE("%%%s%%")', $search['type'], SQLite3::escapeString($search['value']));
+				}
+			}
+		}
+		
+		if (count($where) == 0) {
+			$where = '';
+		} else {
+			$where = 'WHERE ' . implode(sprintf(' %s ', $logic), $where);
+		}
+		
+		
 		$data = []; // GROUP_CONCAT(author.author_name)
-		$result = $this->db->query('SELECT item.title, item.published_date, item.bib_text,
+		$query = sprintf('SELECT item.title, item.published_date, item.bib_text,
 			item.origin_id, item.document_number, item.location_id, item.archive_number,
-			item.comments, item.public_url, item.pdf_url, GROUP_CONCAT(author.author_name) as authors FROM item
+			item.comments, item.public_url, item.pdf_url, GROUP_CONCAT(author.author_name, ", ") as authors,
+			GROUP_CONCAT(category.category_name, ", ") as categories, origin_name, location_name FROM item
 			LEFT JOIN author_item on item.item_id = author_item.item_id
 			LEFT JOIN author on author_item.author_id = author.author_id
-			GROUP BY item.item_id');
+			LEFT JOIN category_item on item.item_id = category_item.item_id
+			LEFT JOIN category on category_item.category_id = category.category_id
+			LEFT JOIN origin on item.origin_id = origin.origin_id
+			LEFT JOIN location on item.location_id = location.location_id
+			%s
+			GROUP BY item.item_id', $where);
+		$result = $this->db->query($query);
 		if($result) {
 			while($row = $result->fetchArray(SQLITE3_ASSOC)) {
 				if ($row) {
@@ -230,12 +282,13 @@ class Item {
 		$item_id = 1;
 		foreach ($data as $key => &$row) {
 			if (!is_array($row)) {
-				$row_values = array_map('trim', explode("\t", $row));
-				while(count($row_values) < count($headers)) {
-					$row_values[] = '';
-				}
-				$row = array_combine($headers, $row_values);
+				$row = explode("\t", $row);
 			}
+			$row_values = array_map('trim', $row);
+			while(count($row_values) < count($headers)) {
+				$row_values[] = '';
+			}
+			$row = array_combine($headers, $row_values);
 			if (strlen($row['title']) == 0) {
 				unset($data[$key]);
 				continue;
@@ -245,7 +298,7 @@ class Item {
 			if (!isset($row['author']) or strlen($row['author']) == 0) {
 				$row['author'] = [];
 			} else {
-				$row['author'] = explode(';', $row['author']);
+				$row['author'] = array_map('trim', explode(';', ucwords($row['author'])));
 			}
 			foreach ($row['author'] as $author) {
 				if (strlen($author) == 0) {
@@ -256,7 +309,7 @@ class Item {
 			if (!isset($row['category']) or strlen($row['category']) == 0) {
 				$row['category'] = [];
 			} else {
-				$row['category'] = explode(';', $row['category']);
+				$row['category'] = array_map('trim', explode(';', ucwords($row['category'])));
 			}
 			foreach ($row['category'] as $category) {
 				if (strlen($category) == 0) {
