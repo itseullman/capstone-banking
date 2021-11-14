@@ -13,45 +13,45 @@
 /* #### MAIN PAGE #### */
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 body {
-  font-family: Verdana, sans-serif;
-  margin: 0;
-  font: 15px/1.5 Arial, Helvetica, sans-serif;
-  padding: 0;
-  margin: 0;
-  background-color: #f4f4f4;
-  min-height: calc(100vh + 300px);
-  padding-bottom: 100px;
+	font-family: Verdana, sans-serif;
+	margin: 0;
+	font: 15px/1.5 Arial, Helvetica, sans-serif;
+	padding: 0;
+	margin: 0;
+	background-color: #f4f4f4;
+	min-height: calc(100vh + 300px);
+	padding-bottom: 100px;
 }
 
 body > header {
-  background: #0a0d6f;
-  color: #ffffff;
-  border-bottom: #ffab1b 3px solid;
-  padding-top: 20px;
+	background: #0a0d6f;
+	color: #ffffff;
+	border-bottom: #ffab1b 3px solid;
+	padding-top: 20px;
 }
 
 
 body > header a {
-  color: #ffffff;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-size: 16px;
+	color: #ffffff;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size: 16px;
 }
 
 body > header > h1 {
-  color: #ffab1b;
-  margin: 0;
-  padding-left: 20px;
+	color: #ffab1b;
+	margin: 0;
+	padding-left: 20px;
 }
 
 body > header > nav ul {
-  display: flex;
-  justify-content: flex-end;
-  list-style: none;
+	display: flex;
+	justify-content: flex-end;
+	list-style: none;
 }
 
 body > header > nav ul li {
@@ -68,19 +68,19 @@ body > header > nav ul a:hover {
 }
 
 @media only screen and (max-width: 450px) {
-  nav ul {
-    flex-direction: column;
-    align-items: center;
-  }
+	nav ul {
+		flex-direction: column;
+		align-items: center;
+	}
 
-  nav ul li {
-    margin: 10px 0;
-  }
+	nav ul li {
+		margin: 10px 0;
+	}
 }
 
 body > main {
-  max-width: 1200px;
-  margin: 0 auto;
+	max-width: 1200px;
+	margin: 0 auto;
 }
 
 body > footer {
@@ -96,29 +96,54 @@ body > footer p {
 	margin: 0;
 }
 
-ul {
-  margin: 0;
-  padding: 0;
+h1, h2, h3, h4, h5, h6, p {
+	margin: 0;
 }
+
+h1 { font-size: 2em; 		padding: 0.67em 0;}
+h2 { font-size: 1.5em; 		padding: 0.60em 0;}
+h3 { font-size: 1.17em; 	padding: 0.53em 0;}
+h4 { font-size: 1em; 		padding: 0.46em 0;}
+h5 { font-size: 0.83em; 	padding: 0.39em 0;}
+h6 { font-size: 0.67em; 	padding: 0.32em 0;}
+
+ul {
+	margin: 0;
+	padding: 0;
+}
+
+
+@font-face {
+	font-family: "dripicon";
+	src: url('./dripicons-v2.woff');
+}
+
+
+
 /* #### END OF MAIN PAGE #### */
 
 /* #### MISC STYLES #### */
 .hidden {
-  display: none;
+	display: none;
 }
 /* #### END OF MISC STYLES #### */
 
+
+
 /* #### HOME PAGE #### */
 #page-home img {
-  max-width: 390px;
-  min-height: 275px;
+	max-width: 390px;
+	min-height: 275px;
 }
 /* #### END OF HOME PAGE #### */
+
+
+
 
 /* #### ARCHIVE PAGE #### */
 
 input[type='search'] {
-  width: 400px;
+	width: 400px;
 }
 
 .filter-button {
@@ -128,43 +153,57 @@ input[type='search'] {
 #page-archive form {
 	padding-right: 40px;
 }
+#page-archive form > div{
+	padding-bottom: 20px;
+	display: flex;
+	position: relative;
+}
 
-
+/*
 #page-archive form input,
 #page-archive form button {
 	margin-top: 20px;
 }
+*/
+
+
 #page-archive form p + div input {
 	margin-top: 0;
 }
 
 /* loading spinner */
 #page-archive form img {
-  width: 30px;
-  height: 30px;
-  position: relative;
-  top: 10px;
+	width: 30px;
+	height: 30px;
+	position: relative;
+	top: 10px;
 }
 
 #archive-search-tools {
 	display: flex;
 	flex-wrap: wrap;
-	width: 360px;
+	width: 100%;
 }
-#archive-search-tools > label,
+#archive-search-tools p {
+	width: 100%;
+}
 #archive-search-tools > div {
 	display: flex;
 }
 #archive-search-tools > div {
-	width: 175px;
+	width: 220px;
 }
 #archive-search-tools > label:hover
 #archive-search-tools > div:hover {
 	box-shadow: 0px 0px 4px 1px #ffab1b;
 }
+#archive-search-tools > label {
+	display: flex;
+	width: 220px;
+}
 #archive-search-tools > label span {
 	display: inline-block;
-	width: 150px;
+	width: calc(100% - 26px);
 }
 #archive-search-tools label span:first-child {
 	width: 25px;
@@ -173,30 +212,126 @@ input[type='search'] {
 	flex-basis: 100%;
 	height: 0;
 }
+#page-archive .search-results-stats > span {
+	width: 32%;
+	display: inline-block;
+}
+#page-archive .search-results-stats {
+	padding-bottom: 20px;
+	width: 450px;
+	display: inline-block;
+}
+
+#page-archive .search-results-format {
+	padding-bottom: 20px;
+	width: 450px;
+	display: inline-block;
+}
+#page-archive .search-results-format button {
+	font-family: 'dripicon';
+}
+
+
+#page-archive .widget-button {
+	margin-left: 10px;
+	min-height: 33px;
+	padding: 0;
+}
+#page-archive .widget-button:first-child {
+	margin-left: 0;
+}
+#page-archive .widget-button {
+	font-size: 17px;
+	padding: 0 6px;
+}
+#page-archive .widget-button-primary {
+	background-color: #0e1295;
+	color: #ffcb70;
+	border: 1px solid black;
+	border-radius: 3px;
+}
+#page-archive #form-logic-button {
+	position: absolute;
+	right: 0px;
+}
+
+#page-archive div.search-results-content {
+	display: flex;
+	flex-wrap: wrap;
+}
+#page-archive dl.search-results-row {
+	margin: 8px;
+	width: 370px;
+	border: 1px solid black;
+	padding: 5px;
+	border-radius: 5px;
+	box-shadow: 2px 1px 6px #ffab1b;
+}
+#page-archive dl.search-results-row-block {
+	width: 100%;
+}
+#page-archive dl.search-results-row dt{
+	font-weight: bold;
+	display: inline-block;
+	width: 150px;
+	vertical-align: top;
+}
+#page-archive dl.search-results-row dd{
+	margin: 0;
+	display: inline-block;
+	width: 220px;
+}
+#page-archive dl.search-results-row > div{
+	display: flex;
+	overflow: hidden;
+}
+#page-archive dl.search-results-row-block  > div {
+	display: inline-block;
+}
+#page-archive dl.search-results-row-block  > div[data-block] {
+	width: 100%;
+	overflow: unset;
+}
+#page-archive dl.search-results-row-block  > div[data-block] dd {
+	width: unset;
+}
+
+#page-archive dl.search-results-row .hidden {
+	display: none;
+}
+
+#page-archive table.search-results-container {
+	border-collapse: collapse;
+}
+#page-archive table.search-results-container tr {
+	border-bottom: 1px solid #bdb5b5;
+}
+
+
 
 /* #### END OF ARCHIVE PAGE #### */
 
 /* #### BIO PAGE #### */
 
 #bio-sidebar > div {
-  padding: 15px;
-  background: #0a0d6f;
-  color: #ffffff;
-  margin-top: 10px;
-  margin-bottom: 10px;
+	padding: 15px;
+	background: #0a0d6f;
+	color: #ffffff;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 /* #### END OF BIO PAGE #### */
 
 /* GLOBAL STYLES */
 .card {
-  border-radius: 5px;
-  box-shadow: 1px 1px 12px lightgray;
-  cursor: pointer;
-  transition: ease-in 0.2s;
+	border-radius: 5px;
+	box-shadow: 1px 1px 12px lightgray;
+	cursor: pointer;
+	transition: ease-in 0.2s;
 }
 
 div[hover]:hover {
-  cursor: pointer;
-  transform: translate(0, -1rem);
+	cursor: pointer;
+	transform: translate(0, -1rem);
 }

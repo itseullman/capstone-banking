@@ -6,7 +6,7 @@ if (typeof ArchiveProgram !== 'undefined') {
 
 // window.localStorage getItem(name) setitem(name, value) removeItem(name) clear()
 
-
+import {ArchiveResultFormatterTable, ArchiveResultFormatterBox, ArchiveResultFormatterRowBox} from './ArchiveResultFormatter.js';
 
 
 var ArchiveProgram = {
@@ -24,6 +24,8 @@ var ArchiveProgram = {
 	searchFeedback: null,
 	
 	loadingSpinner: null,
+	
+	ResultFormatter: null,
 	
 	Start: function() {
 		this.page = document.querySelector('#page-archive');
@@ -88,10 +90,14 @@ var ArchiveProgram = {
 			}
 		});
 		
+		
+		//this.ResultFormatter = new ArchiveResultFormatterTable(this.page);
+		//this.ResultFormatter = new ArchiveResultFormatterBox(this.page);
 		this.Stats.Initialize();
+		this.Filter.Initialize();
+		this.Format.Initialize();
 		this.SearchLogic.Initialize();
 		this.Data.Initialize();
-		this.Filter.Initialize();
 		
 		
 		/*
@@ -135,6 +141,67 @@ var ArchiveProgram = {
 		},
 	},
 	
+	Format: {
+		Container: null,
+		
+		format: 'table',
+		
+		Formatter: null,
+		
+		initialized: false,
+		
+		Initialize: function (){
+			this.Container = ArchiveProgram.page.querySelector('.search-results-format');
+			if (!this.Container) {
+				throw "The page structure has been broken. No search results format container was found.";
+			}
+			this.SetFormatter(window.localStorage.getItem('search-results-format'));
+			// data-format-type="table"
+			this.Container.querySelectorAll('button').forEach(item => {
+				item.addEventListener('click', event => {
+					let type = event.target.dataset.formatType;
+					if (type) {
+						this.SetFormatter(type);
+					}
+				});
+			});
+			this.initialized = true;
+		},
+		
+		SetFormatter: function(format) {
+			if (format === null) {
+				format = 'table';
+			}
+			this.format = format;
+			
+			if (this.Formatter) {
+				this.Formatter.destroy();
+			}
+			switch (format) {
+				case 'table':
+				this.Formatter = new ArchiveResultFormatterTable(ArchiveProgram.page);
+				break;
+				
+				case 'card':
+				this.Formatter = new ArchiveResultFormatterBox(ArchiveProgram.page);
+				break;
+				
+				case 'row-card':
+				this.Formatter = new ArchiveResultFormatterRowBox(ArchiveProgram.page);
+				break;
+				
+				default:
+				throw 'An invalid search results formatter was requested.';
+			}
+			window.localStorage.setItem('search-results-format', format);
+			
+			// Don't reset the Data before it has been initialized.
+			if (this.initialized) {
+				ArchiveProgram.Data.Reset();
+			}
+		}
+	},
+	
 	SearchLogic: {
 		
 		Button: null,
@@ -157,7 +224,6 @@ var ArchiveProgram = {
 				} else {
 					this.SetValue('or');
 				}
-				console.log('saving: ', this.Value());
 				window.localStorage.setItem('form-logic-button', this.Value());
 			});
 			
@@ -210,7 +276,9 @@ var ArchiveProgram = {
 						this.Check(fieldName);
 					});
 				});
-				this.Reset();
+				
+				// TODO: check if the Checks initialized without calling Reset()
+				//this.Reset();
 			},
 			
 			Reset: function () {
@@ -374,6 +442,8 @@ var ArchiveProgram = {
 		FilterRows: function(filters) {
 			console.log(filters);
 			let rows = [...this.GetRows()];
+			let countv = rows.length;
+			let counth = 0;
 			rows.forEach(row => {
 				let visible = true;
 				let show_row = null;
@@ -397,8 +467,12 @@ var ArchiveProgram = {
 					row.classList.remove('hidden');
 				} else {
 					row.classList.add('hidden');
+					countv--;
+					counth++;
 				}
 			});
+			ArchiveProgram.Stats.Visible(countv);
+			ArchiveProgram.Stats.Hidden(counth);
 		},
 		
 		GetColumn: function (field) {
@@ -413,74 +487,49 @@ var ArchiveProgram = {
 			return row.querySelector(`[data-table-field=${field}]`);
 		},
 		
-		GetRowByCell: function(cell) {
-			return cell.closest('.search-results-row');
-		},
-		
 		GetRows: function() {
 			return this.container.querySelectorAll('.search-results-row');
 		},
 		
-		HideRows: function(rows) {
-			rows.forEach(row => {
-				row.classList.add('hidden');
-			});
-		},
-		
-		ToggleColumn: function(field, state) {
-			let cells = [this.GetColumnHeader(field), ...this.GetColumn(field)];
+		ToggleColumn: function(field, state = null) {
+			let cells = [...this.GetColumn(field)];
+			let headerCell = this.GetColumnHeader(field);
+			if (headerCell) {
+				cells.push(headerCell);
+			}
 			
 			if (state === null) {
 				cells.forEach(cell => {
 					cell.classList.toggle('hidden');
 				});
-				let setting = window.localStorage.getItem(`data-display-field-${name}`);
-				window.localStorage.setItem(`data-display-field-${name}`, setting == 'false' ? 'true' : 'false');
+				let setting = window.localStorage.getItem(`data-display-field-${field}`);
+				window.localStorage.setItem(`data-display-field-${field}`, setting == 'false' ? 'true' : 'false');
 			} else if (state === true) {
 				cells.forEach(cell => {
 					cell.classList.remove('hidden');
 				});
-				window.localStorage.setItem(`data-display-field-${name}`, true);
+				window.localStorage.setItem(`data-display-field-${field}`, true);
 			} else if (state === false) {
 				cells.forEach(cell => {
 					cell.classList.add('hidden');
 				});
-				window.localStorage.setItem(`data-display-field-${name}`, false);
+				window.localStorage.setItem(`data-display-field-${field}`, false);
 			}
 		},
 		
-		HideRowsByCells: function(cells) {
-			cells.forEach(cell => {
-				this.GetRowByCell(cell).classList.add('hidden');
-			});
-		},
-		
-		ShowRows: function(rows) {
-			rows.forEach(row => {
-				row.classList.remove('hidden');
-			});
-		},
-		
-		HideColumn: function(field) {
-			[...this.GetColumn(field)].forEach(cell => {
-				cell.classList.add('hidden');
-			});
-		},
-		
-		ShowColumn: function(field) {
-			[...this.GetColumn(field)].forEach(cell => {
-				cell.classList.remove('hidden');
-			});
-		},
-		
-		Reset: function(items) {
-			this.items = items;
+		Reset: function(items = null) {
+			this.container = document.querySelector('#page-archive > .search-results-container');
+			if (items !== null) {
+				this.items = items;
+			}
 			let resultsContent = '';
 			this.items.forEach(item => {
 				resultsContent += this.NewRow(item);
 				
 			});
-			ArchiveProgram.Stats.Total(items.length);
+			ArchiveProgram.Stats.Total(this.items.length);
+			ArchiveProgram.Stats.Visible(this.items.length);
+			ArchiveProgram.Stats.Hidden(0);
 			this.container.querySelector('.search-results-content').innerHTML = resultsContent;
 			ArchiveProgram.Filter.Checks.Reset();
 			ArchiveProgram.Filter.RowToggles.ReFilter();
@@ -492,61 +541,7 @@ var ArchiveProgram = {
 		},
 		
 		NewRow: function(item) {
-			
-			// external-link
-			let public_url = item['public_url'];
-			if (public_url.substr(0, 4) === 'http') {
-				if (public_url.substr(0, 21) === 'https://oaks.kent.edu') {
-					public_url = `<a href="${public_url}">${public_url}</a>`;
-				} else {
-					public_url = `<a href="${public_url}" class="external-link">${public_url}</a>`;
-				}
-			}
-			let pdf_url = item['pdf_url'];
-			if (pdf_url.substr(0, 4) === 'http') {
-				pdf_url = `<a href="${pdf_url}">${pdf_url}</a>`;
-			}
-			
-			return `
-	<tr class="search-results-row">
-		<td data-table-field="title">
-		${item['title']}
-		</td>
-		<td data-table-field="published_date">
-		${item['published_date']}
-		</td>
-		<td data-table-field="document_number">
-		${item['document_number']}
-		</td>
-		<td data-table-field="archive_number">
-		${item['archive_number']}
-		</td>
-		<td data-table-field="author">
-		${item['authors']}
-		</td>
-		<td data-table-field="comments">
-		${item['comments']}
-		</td>
-		<td data-table-field="bib_text">
-		${item['bib_text']}
-		</td>
-		<td data-table-field="origin">
-		${item['origin_name']}
-		</td>
-		<td data-table-field="category">
-		${item['categories']}
-		</td>
-		<td data-table-field="location">
-		${item['location_name']}
-		</td>
-		<td data-table-field="public_url">
-		${public_url}
-		</td>
-		<td data-table-field="pdf_url">
-		${pdf_url}
-		</td>
-	</tr>
-	`;
+			return ArchiveProgram.Format.Formatter.FormatItem(item).outerHTML;
 		}
 	},
 	
@@ -639,6 +634,26 @@ var ArchiveProgram = {
 		xhr.send(null);
 	}, // END OF Ajax()
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
