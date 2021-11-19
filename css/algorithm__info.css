@@ -67,6 +67,12 @@ a {
 
 .alg__pseudo__content {
   overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.alg__pseudo__content::-webkit-scrollbar {
+  display: none;
 }
 
 .alg__pseudo__content h2 {
@@ -122,81 +128,62 @@ a {
 }
 
 /**
-* Reference styles
+* Wikipedia Link Styles
 */
-.alg__references__container {
-  margin-top: 3rem;
-}
+.wiki__container {
+  width: 100%;
 
-.alg__references__container h2 {
-  font-weight: 300;
-  font-size: 2rem;
-  margin: 0;
-}
+  margin: 4rem auto 0 0;
+  padding: 10px 20px;
 
-.alg__references__info {
-  font-size: 1.25rem;
-  margin: 10px 0 1rem 0;
-  width: 95%;
-  max-width: 500px;
-  color: #8e8e93;
-}
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 1px 1px 12px lightgray;
 
-.reference {
   display: flex;
   align-items: center;
-
-  width: 95%;
-  max-width: 900px;
-
-  margin: 1.5rem auto;
-  padding: 10px;
-
-  box-shadow: 1px 1px 12px darkgray;
-  border-radius: 5px;
+  justify-content: space-between;
 
   transition: ease-in 0.2s;
 }
 
-.reference:hover {
-  transform: scale(1.1);
+.wiki__container:hover {
+  cursor: pointer;
+  transform: scale(1.01);
 }
 
-.reference img {
-  height: 100px;
-  width: 100px;
-  margin-right: 1rem;
+.wiki__container img {
+  height: 25px;
+  width: 25px;
 }
 
-.reference__info h3 {
+.wiki__info h2 {
   margin: 0;
+  margin-top: -10px;
+
+  font-weight: 300;
   font-size: 1.5rem;
-  font-weight: 300;
 }
 
-.reference__info h4 {
+.wiki__info p {
   margin: 0;
-  font-size: 1.25rem;
-  font-weight: 300;
-  font-style: italic;
-}
-
-.reference__info p {
-  font-size: 1rem;
-  margin: 5px 0 0 0;
+  margin-top: -7.5px;
 
   color: #8e8e93;
+  font-size: 1.25rem;
 }
 
-@media screen and (max-width: 825px) {
-  .reference {
-    flex-direction: column;
-    text-align: center;
-    padding: 20px;
+@media screen and (max-width: 520px) {
+  .wiki__container {
+    flex-direction: column-reverse;
+    padding: 20px 10px;
   }
 
-  .reference img,
-  .reference h4 {
-    margin-bottom: 1rem;
+  .wiki__info {
+    text-align: center;
+  }
+
+  .wiki__info h2 {
+    margin-top: 0;
   }
 }

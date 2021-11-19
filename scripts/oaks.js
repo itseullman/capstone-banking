@@ -12,7 +12,7 @@ var ArchiveProgram = {
 	
 	searchInput: null,
 	
-	searchResults: null,
+	searchFeedback: null,
 	
 	loadingSpinner: null,
 	
@@ -32,8 +32,8 @@ var ArchiveProgram = {
 			throw "The page structure has been broken. No search input element was found.";
 		}
 		
-		this.searchResults = this.page.querySelector('.ajax-response');
-		if (!this.searchResults) {
+		this.searchFeedback = this.page.querySelector('.ajax-error-response');
+		if (!this.searchFeedback) {
 			throw "The page structure has been broken. No search results element was found.";
 		}
 		
@@ -54,7 +54,7 @@ var ArchiveProgram = {
 	},
 	
 	SubmitHandler: function () {
-		this.searchResults.innerText = '';
+		this.searchFeedback.innerText = '';
 		this.loadingSpinner.classList.remove('hidden');
 		try {
 			let searchInput = this.searchForm.querySelector('input[type=search]');
@@ -68,7 +68,7 @@ var ArchiveProgram = {
 				url: `${this.searchForm.action}&q=${encodeURIComponent(searchInput.value)}`,
 				success: (response) => {
 					if (response.error) {
-						this.searchResults.innerText = response.error;
+						this.searchFeedback.innerText = response.error;
 					} else if (response instanceof Array) {
 						let output = '';
 						response.forEach(item => {
@@ -77,7 +77,7 @@ var ArchiveProgram = {
 						if (output.length == 0) {
 							output = "No results...";
 						}
-						this.searchResults.innerHTML = output;
+						this.searchFeedback.innerHTML = output;
 					}
 					console.log(response);
 					this.loadingSpinner.classList.add('hidden');
@@ -89,7 +89,7 @@ var ArchiveProgram = {
 			});
 		} catch (error) {
 			this.loadingSpinner.classList.add('hidden');
-			this.searchResults.innerText = error;
+			this.searchFeedback.innerText = error;
 		}
 	},
 	
@@ -101,8 +101,6 @@ var ArchiveProgram = {
 		}
 	*/
 	Ajax: function (config) {
-		
-
 		if (!(config instanceof Object)) {
 			throw "ArchiveProgram.Ajax requires a config object.";
 		}
@@ -115,7 +113,6 @@ var ArchiveProgram = {
 		if (typeof config.fail !== "function") {
 			config.fail = function () {};
 		}
-		
 		
 		let xhr = new XMLHttpRequest();
 		xhr.open("GET", config.url, true);

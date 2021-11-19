@@ -61,7 +61,7 @@ foreach ($cola as $type => $select_data) {
 	$select_label = Item::SELECT_LABELS[$type];
 	$select_dropdowns .= <<<EOT
 			<div>
-				<button type="button" class="filter-button" data-display-$type-filter>$select_label</button>
+				<button type="button" class="filter-button widget-button" data-display-$type-filter><main>$select_label</main></button>
 				<div style="position: relative" class="hidden">
 					<select multiple name="{$type}_id" size="$select_size" style="position: absolute">
 	$options
@@ -105,10 +105,10 @@ echo <<<EOT
 			{$inputs['z']}
 			</div>
 			<div>
-				<input type="submit" value="Search">
-				<button type="button" id="search-all-results" title="Retrieve the entire database">All</button>
+				<button type="submit" class="widget-button widget-button-primary">Search</button>
+				<button type="button" class="widget-button" id="search-all-results" title="Retrieve the entire database">All</button>
 				<img class="hidden" src="./img/loading.gif">
-				<button type="button" value="or" id="form-logic-button" style="float: right" title="The results of the four search terms above are either unioned or intersected.">Logical OR</button>
+				<button type="button" class="widget-button" value="or" id="form-logic-button" title="The results of the four search terms above are either unioned or intersected.">Logical OR</button>
 			</div>
 		</form>
 		<div id="archive-search-tools">
@@ -162,61 +162,32 @@ echo <<<EOT
 				<span>PDF URL</span>
 			</label>
 			<div>
-				<button type="button" class="filter-button" name="data-display-toggle" data-display-toggle="toggle">Invert</button>
-				<button type="button" class="filter-button" name="data-display-toggle" data-display-toggle="on">All On</button>
-				<button type="button" class="filter-button" name="data-display-toggle" data-display-toggle="off">All Off</button>
+				<button type="button" class="filter-button widget-button" name="data-display-toggle" data-display-toggle="toggle">Invert</button>
+				<button type="button" class="filter-button widget-button" name="data-display-toggle" data-display-toggle="on">All On</button>
+				<button type="button" class="filter-button widget-button" name="data-display-toggle" data-display-toggle="off">All Off</button>
 			</div>
 			<div>
 			</div>
 $select_dropdowns
 		</div>
 	</div>
-	<div class="ajax-response"></div>
+	<div class="ajax-error-response"></div>
+	
+	<div class="search-results-stats">
+		<h4>Retrieved Items Stats</h4>
+		<span>Total: <span class="search-results-total"></span></span>
+		<span>Hidden: <span class="search-results-hidden"></span></span>
+		<span>Visible: <span class="search-results-visible"></span></span>
+	</div>
+	
+	<div class="search-results-format">
+		<h4>Results Format</h4>
+		<button title="Table" data-format-type="table">y</button>
+		<button title="Cards" data-format-type="card">&#xe05d;</button>
+		<button title="RowCards" data-format-type="row-card">&#xe05b;</button>
+	</div>
 
-	<table class="search-results-container">
-		<thead>
-			<tr>
-				<th data-table-header="title">
-				Title
-				</th>
-				<th data-table-header="published_date">
-				Published Date
-				</th>
-				<th data-table-header="document_number">
-				Document Number
-				</th>
-				<th data-table-header="archive_number">
-				Archive Number
-				</th>
-				<th data-table-header="author">
-				Author(s)
-				</th>
-				<th data-table-header="comments">
-				Comments
-				</th>
-				<th data-table-header="bib_text">
-				Bib. Text
-				</th>
-				<th data-table-header="origin">
-				Produced By
-				</th>
-				<th data-table-header="category">
-				Category
-				</th>
-				<th data-table-header="location">
-				Location
-				</th>
-				<th data-table-header="public_url">
-				Public URL
-				</th>
-				<th data-table-header="pdf_url">
-				PDF URL
-				</th>
-			</tr>
-		</thead>
-	<tbody class="search-results-content"></tbody>
-	</table>
 </section>
-<script src="./scripts/archive.js"></script>
+<script type="module" src="./scripts/archive.js"></script>
 EOT;
 
