@@ -67,6 +67,12 @@ a {
 
 .alg__pseudo__content {
   overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.alg__pseudo__content::-webkit-scrollbar {
+  display: none;
 }
 
 .alg__pseudo__content h2 {
@@ -142,11 +148,17 @@ a {
   color: #8e8e93;
 }
 
+/**
+* Each individual reference
+*/
+
 .reference {
   display: flex;
   align-items: center;
 
-  width: 95%;
+  background-color: white;
+
+  width: 90%;
   max-width: 900px;
 
   margin: 1.5rem auto;
@@ -169,7 +181,7 @@ a {
 }
 
 .reference__info h3 {
-  margin: 0;
+  margin: 0 0 -1rem 0;
   font-size: 1.5rem;
   font-weight: 300;
 }
@@ -184,8 +196,17 @@ a {
 .reference__info p {
   font-size: 1rem;
   margin: 5px 0 0 0;
+  height: 4.25rem;
+
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
   color: #8e8e93;
+}
+
+.reference__info p::-webkit-scrollbar {
+  display: none;
 }
 
 @media screen and (max-width: 825px) {
