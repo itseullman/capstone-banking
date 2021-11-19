@@ -43,6 +43,44 @@ body > header {
 }
 
 
+
+
+
+
+#bio-page header {
+	  display: block;
+
+	}
+	#bio-page ul {
+	  list-style-type: none;
+	  padding: 0;
+	  width: 170px;
+	  background-color: #f1f1f1;
+	  position: fixed;
+    left:0;
+	  height: 100%;
+	  overflow: auto;
+	}
+
+	#bio-page li a {
+	  display: block;
+	  color: #000;
+	  padding: 8px 16px;
+	  text-decoration: none;
+	}
+
+	#bio-page li a.active {
+	  background-color: #04AA6D;
+	  color: white;
+	}
+
+
+
+
+
+
+
+
 body > header a {
 	color: #ffffff;
 	text-decoration: none;
