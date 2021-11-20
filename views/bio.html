@@ -1,27 +1,18 @@
-<link rel="stylesheet" href="./css/style.css">
+<link rel="stylesheet" href="./css/biography.css" />
+<script src="./scripts/biography.js" defer></script>
 
-	<script>
-		function show(shown, hidden) {
-			document.getElementById(shown).style.display='block';
-			document.getElementById(hidden).style.display='none';
-			return false;
-		}
-	</script>
-
-<div id="bio-page">
-<ul>
-  <li><a class="active" href="#introduction">Introduction</a></li>
-  <li><a href="#early-life">Early Life</a></li>
-  <li><a href="#education">Education</a></li>
-  <li><a href="#career">Career</a></li>
-  <li><a href="#contributions">Contributions</a></li>
-  <li><a href="#awards">Awards</a></li>
-  <li><a href="#late-life">Late Life</a></li>
+<ul class="tabs">
+  <li data-tab-target="#introduction" class="active tab">Introduction</li>
+  <li data-tab-target="#early-life" class="tab">Early Life</li>
+  <li data-tab-target="#education" class="tab">Education</li>
+  <li data-tab-target="#career" class="tab">Career</li>
+  <li data-tab-target="#contributions" class="tab">Contributions</li>
+  <li data-tab-target="#awards" class="tab">Awards</li>
+  <li data-tab-target="#late-life" class="tab">Late Life</li>
 </ul>
 
-
-<div style="margin-left:25%;padding:1px 16px;">
-  <div id="introduction">
+<div class="tab-content">
+  <div id="introduction" class="active" data-tab-content>
     <h1 align="center">Introduction</h1>
     <p>
       “The Russians saved me!” laughed Dr. Johnnie Baker as he regaled me with
@@ -61,7 +52,7 @@
       this environment where Ken’s mind was fostered and able to flourish.
     </p>
   </div>
-  <div id="early-life">
+  <div id="early-life" data-tab-content>
 		<h1 align="center">Early Life</h1>
 
 	<p>
@@ -71,7 +62,7 @@
 
 	</P>
   </div>
-  <div id="education">
+  <div id="education" data-tab-content>
 		<h1 align="center">Education</h1>
 		<p>Batcher graduated from Iowa State University with B.E. degree in 1957. In 1964,
 			Batcher received his Ph.D. in electrical engineering from the University of Illinois.</p>
@@ -86,14 +77,14 @@
 
 		</p>
   </div>
-  <div id="career">
+  <div id="career" data-tab-content>
 		<h1 align="center">Career</h1>
 		<p>
-			He worked for Goodyear Aerospace as a Computer Engineer and later as a professor at Kent State University (since 1989). 
+			He worked for Goodyear Aerospace as a Computer Engineer and later as a professor at Kent State University (since 1989). 
 
 		</p>
   </div>
-  <div id="contributions">
+  <div id="contributions" data-tab-content>
 	<h1 align="center">Contributions</h1>
 	<p>
 	  Dr. Kenneth E. Batcher was a figurehead in the field of Computer
@@ -164,7 +155,7 @@
 	<p>
 	  Throughout his career, Dr. Batcher invented and co-invented 14 U.S.
 	  patents:
-	  <ul>
+	  <ul class="patents">
 		<li>3,183,363 Logic Mechanization System 1965 (multiple inventors)</li>
 		<li>3,300,762 Multiple Response Resolver Apparatus 1967</li>
 		<li>3,418,632 Means for Merging Sequences of Data 1968</li>
@@ -187,7 +178,7 @@
 	</p>
 
   </div>
-  <div id="awards">
+  <div id="awards" data-tab-content>
 	<h1 align="center">Awards</h1>
 	<h2>Arnstein Award - 1980</h2>
 	<p>
@@ -225,7 +216,7 @@
 	  [<a href = "http://batcher.subspacehorizons.com/index.php?page=bio" target = "_blank">Source</a>]
 	</p>
   </div>
-  <div id="late-life">
+  <div id="late-life" data-tab-content>
 	<h1 align="center">Late Life</h1>
 	<p>
 	  Dr. Kenneth Edward Batcher passed away in Stow, Ohio on August 22, 2019.
@@ -240,5 +231,4 @@
 	  his grandchildren, Joshua, Lenora, Victoria, and Noah Batcher; and his brother, Noah Batcher.
 	</p>
   </div>
-</div>
 </div>
