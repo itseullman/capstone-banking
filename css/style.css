@@ -65,7 +65,6 @@ body > header > nav ul a:hover {
 	background-color: #ffab1b;
 	color: black;
 }
-}
 
 @media only screen and (max-width: 450px) {
 	nav ul {
@@ -312,14 +311,6 @@ input[type='search'] {
 /* #### END OF ARCHIVE PAGE #### */
 
 /* #### BIO PAGE #### */
-
-#bio-sidebar > div {
-	padding: 15px;
-	background: #0a0d6f;
-	color: #ffffff;
-	margin-top: 10px;
-	margin-bottom: 10px;
-}
 
 /* #### END OF BIO PAGE #### */
 
