@@ -51,3 +51,7 @@ body {
 .patents {
   margin: 20px;
 }
+
+.reference {
+  font-style: italic;
+}
