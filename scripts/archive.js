@@ -90,7 +90,6 @@ var ArchiveProgram = {
 			}
 		});
 		
-		
 		//this.ResultFormatter = new ArchiveResultFormatterTable(this.page);
 		//this.ResultFormatter = new ArchiveResultFormatterBox(this.page);
 		this.Stats.Initialize();
@@ -116,6 +115,11 @@ var ArchiveProgram = {
 			});
 			this.SubmitHandler();
 		});
+		let auto_load_data = this.page.querySelector('div[data-item-hash]');
+		if (auto_load_data) {
+			let auto_load_hash = auto_load_data.dataset.itemHash;
+			this.AutoItemLoader(auto_load_hash);
+		}
 	},
 	
 	Stats: {
@@ -440,7 +444,6 @@ var ArchiveProgram = {
 		},
 		
 		FilterRows: function(filters) {
-			console.log(filters);
 			let rows = [...this.GetRows()];
 			let countv = rows.length;
 			let counth = 0;
@@ -524,7 +527,9 @@ var ArchiveProgram = {
 			}
 			let resultsContent = '';
 			this.items.forEach(item => {
-				resultsContent += this.NewRow(item);
+				if (item.length != 0) {
+					resultsContent += this.NewRow(item);
+				}
 				
 			});
 			ArchiveProgram.Stats.Total(this.items.length);
@@ -574,6 +579,38 @@ var ArchiveProgram = {
 						this.searchFeedback.innerText = response.error;
 					} else if (response instanceof Object) {
 						
+						if (response.items && response.items instanceof Array) {
+							this.Data.Reset(response.items);
+						}
+						
+					}
+					this.loadingSpinner.classList.add('hidden');
+				},
+				fail: (statusText) => {
+					console.log(statusText);
+					this.loadingSpinner.classList.add('hidden');
+				},
+			});
+		} catch (error) {
+			this.loadingSpinner.classList.add('hidden');
+			this.searchFeedback.innerText = error;
+		}
+	},
+	
+	AutoItemLoader: function (hash) {
+		this.Data.Clear();
+		
+		this.loadingSpinner.classList.remove('hidden');
+		try {
+			
+			
+			this.Ajax({
+				url: `./index.php?page=data&action=auto-item&hash=${hash}`,
+				success: (response) => {
+					if (response.error) {
+						this.searchFeedback.innerText = response.error;
+					} else if (response instanceof Object) {
+						console.log(response);
 						if (response.items && response.items instanceof Array) {
 							this.Data.Reset(response.items);
 						}

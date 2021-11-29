@@ -24,16 +24,20 @@ if (isset($_REQUEST['q'])) {
 
 echo <<<EOT
 <section id="page-archive">
-	<h1>Search KSU OAKs Database</h1>
+	<h1 style="padding-bottom: 0">Search KSU OAKs Database</h1>
+	<p style="padding-bottom: 20px; font-style: italic;">Follow <a href="https://oaks.kent.edu/kenneth-e-batcher-collection">this</a> link to view the "Kenneth E. Batcher Collection: Papers from the Parallel and Associative Computing Laboratory Collections" directly on the KSU OAKs website.</p>
 	<form method="get" action="./index.php?page=data&action=oaks">
 		<input type="search" value="$q">
 		<input type="submit" value="Search">
 		<img class="hidden" src="./img/loading.gif">
 	</form>
 	
-	<div class="ajax-response"></div>
+	<div class="ajax-error-response"></div>
+	<br>
+	<br>
 </section>
-
-<script src="./scripts/archive.js"></script>
+<script src="./scripts/crypto-core.min.js"></script>
+<script src="./scripts/crypto-md5.min.js"></script>
+<script type="module" src="./scripts/oaks.js"></script>
 EOT;
 

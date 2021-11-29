@@ -18,6 +18,8 @@ class ArchiveResultFormatter {
 			} else {
 				public_url = `<a href="${public_url}" class="external-link">${public_url}</a>`;
 			}
+		} else if (public_url.substr(0, 2) === './') {
+				public_url = `<a href="${public_url}">View</a>`;
 		}
 		return public_url;
 	}
@@ -26,8 +28,22 @@ class ArchiveResultFormatter {
 		let pdf_url = item['pdf_url'];
 		if (pdf_url.substr(0, 4) === 'http') {
 			pdf_url = `<a href="${pdf_url}">${pdf_url}</a>`;
+		} else if (pdf_url.substr(0, 2) === './') {
+				pdf_url = `<a href="${pdf_url}">View</a>`;
 		}
 		return pdf_url;
+	}
+	
+	FormatPublishedDate(date) {
+		if (date.includes('00:00:00')) {
+			return date.replace('00:00:00', '').trim();
+		} else {
+			return date;
+		}
+	}
+	
+	FixEmptyArrays() {
+		
 	}
 	
 	destroy() {
@@ -91,10 +107,11 @@ export class ArchiveResultFormatterTable extends ArchiveResultFormatter {
 		let pdf_url = this.GetPdfLink(item);
 		let node = document.createElement('tr');
 		node.classList.add('search-results-row');
+		item.published_date = this.FormatPublishedDate(item.published_date);
 		
 		node.innerHTML = `
 		<td data-table-field="title">
-		${item['title']}
+		<a href="index.php?page=archive&hash=${item['hash']}" title="Permanent link to this item">${item['title']}</a>
 		</td>
 		<td data-table-field="published_date">
 		${item['published_date']}
@@ -148,8 +165,9 @@ export class ArchiveResultFormatterBox extends ArchiveResultFormatter {
 		let pdf_url = this.GetPdfLink(item);
 		let node = document.createElement('dl');
 		node.classList.add('search-results-row');
+		item.published_date = this.FormatPublishedDate(item.published_date);
 		node.innerHTML = `
-			<div data-table-field="title"><dt>Title</dt><dd>${item['title']}</dd></div>
+			<div data-table-field="title"><dt>Title</dt><dd><a href="index.php?page=archive&hash=${item['hash']}" title="Permanent link to this item">${item['title']}</a></dd></div>
 			<div data-table-field="published_date"><dt>Published Date</dt><dd>${item['published_date']}</dd></div>
 			<div data-table-field="document_number"><dt>Document Number</dt><dd>${item['document_number']}</dd></div>
 			<div data-table-field="archive_number"><dt>Archive Number</dt><dd>${item['archive_number']}</dd></div>
@@ -180,8 +198,9 @@ export class ArchiveResultFormatterRowBox extends ArchiveResultFormatter {
 		let node = document.createElement('dl');
 		node.classList.add('search-results-row');
 		node.classList.add('search-results-row-block');
+		item.published_date = this.FormatPublishedDate(item.published_date);
 		node.innerHTML = `
-			<div data-table-field="title" data-block><dt>Title</dt><dd>${item['title']}</dd></div>
+			<div data-table-field="title" data-block><dt>Title</dt><dd><a href="index.php?page=archive&hash=${item['hash']}" title="Permanent link to this item">${item['title']}</a></dd></div>
 			<div data-table-field="published_date"><dt>Published Date</dt><dd>${item['published_date']}</dd></div>
 			<div data-table-field="author"><dt>Author(s)</dt><dd>${item['authors']}</dd></div>
 			<div data-table-field="comments" data-block><dt>Comments</dt><dd>${item['comments']}</dd></div>
@@ -198,6 +217,72 @@ export class ArchiveResultFormatterRowBox extends ArchiveResultFormatter {
 	}
 }
 
+
+/*
+JSON data structure of OAKS database response:
+	id – (integer) the internal OAKS id for the item
+	title – (string) the title of the item
+	author – (delimited string) the author(s) of the (multiple authors are separated by the semi-colon character)
+	date – (string) the date the item was published in the format
+	public_url – (string) a URL to the public display of the item in OAKS
+	pdf_url – (string) a URL to the PDF for the item (if it has a PDF in OAKS)
+*/
+export class ArchiveResultFormatterOaksTable extends ArchiveResultFormatter {
+	InitializeContainer() {
+		this.Container = document.createElement('table');
+		this.Container.classList.add('search-results-container');
+		this.Container.innerHTML = `
+		<thead>
+			<tr>
+				<th data-table-header="title">
+				Title
+				</th>
+				<th data-table-header="published_date">
+				Published Date
+				</th>
+				<th data-table-header="author">
+				Author(s)
+				</th>
+				<th data-table-header="public_url">
+				Public URL
+				</th>
+				<th data-table-header="pdf_url">
+				PDF URL
+				</th>
+			</tr>
+		</thead>
+	<tbody class="search-results-content"></tbody>
+		`;
+	}
+	
+	FormatItem(item) {
+		let public_url = this.GetPublicLink(item);
+		let pdf_url = this.GetPdfLink(item);
+		let node = document.createElement('tr');
+		node.classList.add('search-results-row');
+		
+		item.hash = CryptoJS.MD5(item.title).toString();
+		
+		node.innerHTML = `
+		<td data-table-field="title">
+		<a href="index.php?page=archive&hash=${item['hash']}" title="Permanent link to this item">${item['title']}</a>
+		</td>
+		<td data-table-field="published_date">
+		${item['date']}
+		</td>
+		<td data-table-field="author">
+		${item['author']}
+		</td>
+		<td data-table-field="public_url">
+		${public_url}
+		</td>
+		<td data-table-field="pdf_url">
+		${pdf_url}
+		</td>
+		`;
+		return node;
+	}
+}
 
 
 

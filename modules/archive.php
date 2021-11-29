@@ -2,6 +2,8 @@
 
 include_once(CORE_DIR . DIRECTORY_SEPARATOR . 'Oaks.php');
 include_once(CORE_DIR . DIRECTORY_SEPARATOR . 'Item.php');
+
+/*
 $meta = OakMeta::Instance();
 $min_year = $meta->Get('year-min');
 $max_year = $meta->Get('year-max');
@@ -16,6 +18,7 @@ if (!is_array($max_year)) {
 } else {
 	$max_year = $max_year['meta_value'];
 }
+*/
 
 $search_fields = ['w','x','y','z'];
 $inputs = [];
@@ -72,19 +75,24 @@ foreach ($cola as $type => $select_data) {
 EOT;
 }
 
-
-$authors = $item->GetAuthors();
-$author_options = '<option value="-1" selected>All</option>' . PHP_EOL;
-foreach ($authors as $author) {
-	$author_options .= sprintf('<option value="%d">%s</option>%s', $author['author_id'], $author['author_name'], PHP_EOL);
+if (!isset($_REQUEST['hash'])) {
+	$auto_load_item = '';
+} else {
+	$hash = htmlspecialchars($_REQUEST['hash']);
+	$auto_load_item = <<<EOT
+<div data-item-hash="$hash"></div>
+EOT;
 }
+
 
 
 	// title, published_date, document_number, archive_number, authors, comments, bib_text, origin_name, categories, location_name, public_url, pdf_url
 echo <<<EOT
 <section id="page-archive">
-	<div style="float: right; width: 200px;"><a href="./index.php?page=oaks">Search KSU OAKs Database</a></div>
-	<h1>The Archive</h1>
+	<h1 style="padding-bottom: 0">The Archive</h1>
+	<p style="padding-bottom: 20px; font-style: italic;">A searchable database of works from Prof. Batcher and his colleagues. A subset of this archive
+	are items from the KSU OAKs database.<br>
+	To directly search only the OAKs database, click <a href="./index.php?page=oaks" title="Search the KSU OAKs Database">here</a>.</p>
 	
 	<div style="display: flex">
 		
@@ -187,6 +195,7 @@ $select_dropdowns
 		<button title="RowCards" data-format-type="row-card">&#xe05b;</button>
 	</div>
 
+$auto_load_item
 </section>
 <script type="module" src="./scripts/archive.js"></script>
 EOT;

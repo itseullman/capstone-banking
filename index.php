@@ -28,7 +28,6 @@
 	MODULE_DIR
 	CORE_DIR
 	DB_DIR
-	DATA_DIR
 */
 	
 	
@@ -87,9 +86,6 @@ define('CORE_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'core');
 
 // Define DB_DIR
 define('DB_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'db');
-
-// Define DATA_DIR
-define('DATA_DIR', BASE_DIR . DIRECTORY_SEPARATOR . 'data');
 
 #-------------------------------------#
 # END OF DEFINE SOME GLOBAL CONSTANTS #

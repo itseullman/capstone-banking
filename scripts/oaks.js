@@ -4,6 +4,8 @@ if (typeof ArchiveProgram !== 'undefined') {
 	throw "The variable Program has already been defined. No javascript will be available on this page.";
 }
 
+import {ArchiveResultFormatterOaksTable} from './ArchiveResultFormatter.js';
+
 var ArchiveProgram = {
 	
 	page: null,
@@ -15,6 +17,8 @@ var ArchiveProgram = {
 	searchFeedback: null,
 	
 	loadingSpinner: null,
+	
+	Formatter: null,
 	
 	Start: function() {
 		this.page = document.querySelector('#page-archive');
@@ -51,9 +55,14 @@ var ArchiveProgram = {
 			this.SubmitHandler();
 		}
 		
+		this.Formatter = new ArchiveResultFormatterOaksTable(this.page);
+		
+		
 	},
 	
 	SubmitHandler: function () {
+		
+		let searchResultsContainer = document.querySelector('.search-results-content');
 		this.searchFeedback.innerText = '';
 		this.loadingSpinner.classList.remove('hidden');
 		try {
@@ -68,16 +77,18 @@ var ArchiveProgram = {
 				url: `${this.searchForm.action}&q=${encodeURIComponent(searchInput.value)}`,
 				success: (response) => {
 					if (response.error) {
-						this.searchFeedback.innerText = response.error;
+						//this.searchFeedback.innerText = response.error;
 					} else if (response instanceof Array) {
 						let output = '';
 						response.forEach(item => {
-							output += `${item.author}, ${item.title}<br>`;
+							//output += `${item.author}, ${item.title}<br>`;
+							output += this.Formatter.FormatItem(item).outerHTML;
 						});
 						if (output.length == 0) {
-							output = "No results...";
+							output = "<tr><td>No results...</td></tr>";
 						}
-						this.searchFeedback.innerHTML = output;
+						//this.searchFeedback.innerHTML = output;
+						searchResultsContainer.innerHTML = output;
 					}
 					console.log(response);
 					this.loadingSpinner.classList.add('hidden');

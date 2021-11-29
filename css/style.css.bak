@@ -1,0 +1,158 @@
+/*
+	CSS Styles
+
+	MAIN PAGE
+
+	MISC STYLES
+
+	HOME PAGE
+	ARCHIVE PAGE
+	BIO PAGE
+*/
+
+/* #### MAIN PAGE #### */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Verdana, sans-serif;
+  margin: 0;
+  font: 15px/1.5 Arial, Helvetica, sans-serif;
+  padding: 0;
+  margin: 0;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+  padding-bottom: 100px;
+}
+
+body > header {
+  background: #0a0d6f;
+  color: #ffffff;
+  border-bottom: #ffab1b 3px solid;
+  padding-top: 20px;
+}
+
+
+body > header a {
+  color: #ffffff;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 16px;
+}
+
+body > header > h1 {
+  color: #ffab1b;
+  margin: 0;
+  padding-left: 20px;
+}
+
+body > header > nav ul {
+  display: flex;
+  justify-content: flex-end;
+  list-style: none;
+}
+
+body > header > nav ul li {
+  padding: 5px 15px;
+}
+body > header > nav ul li:hover {
+  background-color: #ffab1b;
+}
+body > header > nav ul li:hover a {
+  color: black;
+}
+
+@media only screen and (max-width: 450px) {
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav ul li {
+    margin: 10px 0;
+  }
+}
+
+body > main {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+body > footer {
+	position: fixed;
+	bottom: 0;
+	padding: 5px;
+	width: 100%;
+	color: #ffffff;
+	background-color: #0a0d6f;
+	text-align: center;
+}
+body > footer p {
+	margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+/* #### END OF MAIN PAGE #### */
+
+/* #### MISC STYLES #### */
+.hidden {
+  display: none;
+}
+/* #### END OF MISC STYLES #### */
+
+/* #### HOME PAGE #### */
+#page-home img {
+  max-width: 390px;
+  min-height: 275px;
+}
+/* #### END OF HOME PAGE #### */
+
+/* #### ARCHIVE PAGE #### */
+
+input[type='search'] {
+  width: 400px;
+}
+
+#page-archive form input {
+  margin-top: 20px;
+}
+
+/* loading spinner */
+#page-archive form img {
+  width: 30px;
+  height: 30px;
+  position: relative;
+  top: 10px;
+}
+
+/* #### END OF ARCHIVE PAGE #### */
+
+/* #### BIO PAGE #### */
+
+#bio-sidebar > div {
+  padding: 15px;
+  background: #0a0d6f;
+  color: #ffffff;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* #### END OF BIO PAGE #### */
+
+/* GLOBAL STYLES */
+.card {
+  border-radius: 5px;
+  box-shadow: 1px 1px 12px lightgray;
+  cursor: pointer;
+  transition: ease-in 0.2s;
+}
+
+div[hover]:hover {
+  cursor: pointer;
+  transform: translate(0, -1rem);
+}

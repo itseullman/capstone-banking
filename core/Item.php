@@ -4,6 +4,8 @@ include_once(CORE_DIR . DIRECTORY_SEPARATOR . 'Oaks.php');
 
 class Item {
 	
+	const BOOSTRAP_FILENAME = 'item-bootstrap.xlsx';
+	
 	const SELECT_LABELS = [
 		'category' => 'Categories',
 		'origin' => 'Produced By',
@@ -77,6 +79,11 @@ class Item {
 		'category' => [
 			'create' => false,
 			'insert' => false,
+			'fk' => false,
+		],
+		'hash' => [
+			'create' => 'VARCHAR(32)',
+			'insert' => SQLITE3_TEXT,
 			'fk' => false,
 		],
 	];
@@ -195,6 +202,51 @@ class Item {
 		return $data;
 	}
 	
+	public function GetItemByHash($hash) {
+		
+		$query = 'SELECT item.title, item.published_date, item.bib_text,
+			item.origin_id, item.document_number, item.location_id, item.archive_number, item.hash,
+			item.comments, item.public_url, item.pdf_url, GROUP_CONCAT(author.author_name, ";") as authors,
+			GROUP_CONCAT(category.category_name, ";") as categories, origin_name, location_name FROM item
+			LEFT JOIN author_item on item.item_id = author_item.item_id
+			LEFT JOIN author on author_item.author_id = author.author_id
+			LEFT JOIN category_item on item.item_id = category_item.item_id
+			LEFT JOIN category on category_item.category_id = category.category_id
+			LEFT JOIN origin on item.origin_id = origin.origin_id
+			LEFT JOIN location on item.location_id = location.location_id
+			WHERE item.hash = :item_hash
+			GROUP BY item.item_id';
+		$stmt = $this->db->prepare($query);
+		$stmt->bindValue('item_hash', $hash, SQLITE3_TEXT);
+		$result = $stmt->execute();
+		if($result) {
+			$row = $result->fetchArray(SQLITE3_ASSOC);
+			if ($row) {
+				if (is_null($row['authors'])) {
+					$row['authors'] = '';
+				} else if (strlen($row['authors']) > 0) {
+					$row['authors'] = implode('; ', array_unique(array_map('trim', explode(';', $row['authors']))));
+				}
+				if (is_null($row['categories'])) {
+					$row['categories'] = '';
+				} else if (strlen($row['categories']) > 0) {
+					$row['categories'] = implode('; ', array_unique(array_map('trim', explode(';', $row['categories']))));
+				}
+				if (is_null($row['origin_name'])) {
+					$row['origin_name'] = '';
+				}
+				if (is_null($row['origin_id'])) {
+					$row['origin_id'] = '';
+				}
+				if (is_null($row['location_name'])) {
+					$row['location_name'] = '';
+				}
+				return $row;
+			}
+		}
+		return [];
+	}
+	
 	public function GetItems($searches = [], $logic = 'or') {
 		if ($logic != 'and') {
 			$logic = 'or';
@@ -218,9 +270,9 @@ class Item {
 		
 		$data = []; // GROUP_CONCAT(author.author_name)
 		$query = sprintf('SELECT item.title, item.published_date, item.bib_text,
-			item.origin_id, item.document_number, item.location_id, item.archive_number,
-			item.comments, item.public_url, item.pdf_url, GROUP_CONCAT(author.author_name, ", ") as authors,
-			GROUP_CONCAT(category.category_name, ", ") as categories, origin_name, location_name FROM item
+			item.origin_id, item.document_number, item.location_id, item.archive_number, item.hash,
+			item.comments, item.public_url, item.pdf_url, GROUP_CONCAT(author.author_name, ";") as authors,
+			GROUP_CONCAT(category.category_name, ";") as categories, origin_name, location_name FROM item
 			LEFT JOIN author_item on item.item_id = author_item.item_id
 			LEFT JOIN author on author_item.author_id = author.author_id
 			LEFT JOIN category_item on item.item_id = category_item.item_id
@@ -233,6 +285,40 @@ class Item {
 		if($result) {
 			while($row = $result->fetchArray(SQLITE3_ASSOC)) {
 				if ($row) {
+					if (is_null($row['authors'])) {
+						$row['authors'] = '';
+					} else if (strlen($row['authors']) > 0) {
+						$row['authors'] = implode('; ', array_unique(array_map('trim', explode(';', $row['authors']))));
+					}
+					if (is_null($row['categories'])) {
+						$row['categories'] = '';
+					} else if (strlen($row['categories']) > 0) {
+						$row['categories'] = implode('; ', array_unique(array_map('trim', explode(';', $row['categories']))));
+					}
+					if (is_null($row['origin_name'])) {
+						$row['origin_name'] = '';
+					}
+					if (is_null($row['origin_id'])) {
+						$row['origin_id'] = '';
+					}
+					if (is_null($row['location_name'])) {
+						$row['location_name'] = '';
+					}
+					$data[] = $row;
+				}
+			}
+		}
+		return $data;
+	}
+	
+	public function GetDuplicates() {
+		$data = []; // GROUP_CONCAT(author.author_name)
+		$query = 'SELECT item.title, count(item.title) as freq FROM item
+			GROUP BY item.title';
+		$result = $this->db->query($query);
+		if($result) {
+			while($row = $result->fetchArray(SQLITE3_ASSOC)) {
+				if ($row && $row['freq'] > 1) {
 					$data[] = $row;
 				}
 			}
@@ -265,9 +351,12 @@ class Item {
 	}
 	
 	private function InitItem() {
-		echo "<h3>Initializing Item</h3>";
-		$data = explode("\n", file_get_contents(DATA_DIR . DIRECTORY_SEPARATOR . 'item.csv'));
-		$headers = array_map('trim', explode("\t", array_shift($data)));
+		echo "<h3>--Initializing Item--</h3>";
+		require_once(CORE_DIR . DIRECTORY_SEPARATOR . 'SimpleXLSX.php');
+		
+		$data = SimpleXLSX::parse(DB_DIR . DIRECTORY_SEPARATOR . self::BOOSTRAP_FILENAME)->rows();
+		$headers = array_map('trim', array_shift($data));
+		
 		
 		$oakSearch = OakSearch::Instance();
 		$oakResults = $oakSearch();
@@ -331,7 +420,7 @@ class Item {
 		unset($row);
 		
 		// item_id should not be specified in
-		// the item.csv boostrap file.
+		// the self::BOOSTRAP_FILENAME boostrap file.
 		$headers[] = 'item_id';
 		
 		$this->InitNameIdEntity('author', $authors);
@@ -376,7 +465,7 @@ class Item {
 		if (!is_string($header_template)) {
 			foreach ($headers as $header) {
 				if (!isset(self::TYPES[$header])) {
-					throw new Exception('The format of item.csv is incorrect.');
+					throw new Exception('The format of ' . self::BOOSTRAP_FILENAME . ' is incorrect.');
 				} else if (self::TYPES[$header]['create'] === false) {
 					continue;
 				}
@@ -384,10 +473,17 @@ class Item {
 				$create_template[] = sprintf('%s %s', $header, self::TYPES[$header]['create']);
 				$item_columns[] = $header;
 			}
+			$header_template[] = ':item_hash_%1$d';
 			$header_template = sprintf('(%s)', implode(', ', $header_template));
+			$create_template[] = sprintf('%s %s', 'hash', self::TYPES['hash']['create']);
 			$create_template = sprintf('(%s)', implode(', ', $create_template));
 			$item_columns = implode(', ', $item_columns);
+			$item_columns .= ', hash';
 		}
+		
+		//echo '<pre>';
+		//print_r($create_template);
+		//print_r($header_template); echo '</pre>'; exit;
 		
 		$field_data = [];
 		$placeholders = [];
@@ -402,7 +498,7 @@ class Item {
 						foreach ($field as $field_item) {
 							foreach ($entityData[$key] as $entity_row) {
 								if ($entity_row[$key . '_name'] == $field_item) {
-									$entityData[$key . '_item'][$row['item_id']] = $entity_row[$key . '_id'];
+									$entityData[$key . '_item'][] = [$row['item_id'], $entity_row[$key . '_id']];
 									break;
 								}
 							}
@@ -430,6 +526,10 @@ class Item {
 					'key' =>$key,
 				];
 			}
+			$field_data[sprintf('item_hash_%d', $row_num)] = [
+				'value' => md5($row['title']),
+				'key' =>'hash',
+			];
 		}
 		
 		if ($drop_and_create) {
@@ -471,7 +571,7 @@ class Item {
 		foreach ($values as $key => $datum) {
 			$stmt->bindValue($key, $datum, SQLITE3_INTEGER);
 		}
-		$result = $stmt->execute();
+		$stmt->execute();
 	}
 	
 	private function InitJunctionIdEntity($part_name, $data) {
@@ -482,10 +582,10 @@ class Item {
 		$values = [];
 		$placeholders = [];
 		$count = 1;
-		foreach ($data as $item_id => $datum) {
+		foreach ($data as $datum) {
 			$placeholders[] = sprintf('(:%1$s_id_%2$d, :item_id_%2$d)', $part_name, $count);
-			$values[sprintf('%s_id_%d', $part_name, $count)] = $datum;
-			$values[sprintf('item_id_%d', $count)] = $item_id;
+			$values[sprintf('%s_id_%d', $part_name, $count)] = $datum[1];
+			$values[sprintf('item_id_%d', $count)] = $datum[0];
 			$count++;
 		}
 		
@@ -505,7 +605,7 @@ class Item {
 			foreach ($values_ as $key => $datum) {
 				$stmt->bindValue($key, $datum, SQLITE3_INTEGER);
 			}
-			$result = $stmt->execute();
+			$stmt->execute();
 		}
 	}
 	

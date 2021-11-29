@@ -16,37 +16,95 @@ include_once(CORE_DIR . DIRECTORY_SEPARATOR . 'Oaks.php');
 
 switch (REQUEST_ACTION) {
 	// View strings (or intialize the strings table)
-	case 'sq3_strings':
-	case_sq3_strings();
-	break;
+	//case 'sq3_strings':
+	//case_sq3_strings();
+	//break;
 	
 	// View Oaks meta-data (or intialize the meta_data table)
-	case 'sq3_oaks':
-	case_sq3_oaks();
-	break;
+	//case 'sq3_oaks':
+	//case_sq3_oaks();
+	//break;
 	
-	case 'sq3_query':
-	case_sq3_query();
-	break;
+	// test tool to perform arbitrary queries on the db
+	//case 'sq3_query':
+	//case_sq3_query();
+	//break;
 	
-	case 'table':
-	case_data_table();
-	break;
+	// a rudimentary first stab at get and displaying oaks results
+	//case 'table':
+	//case_data_table();
+	//break;
 	
+	// Performs a search via the OAKS REST service
 	case 'oaks':
 	isAjax(true);
 	case_oaks();
 	break;
 	
+	// Performs a search of our local database
 	case 'search':
 	isAjax(true);
 	case_search();
 	break;
 	
+	// Finds duplicate entries in the database
+	//case 'duplicates':
+	//case_duplicates();
+	//break;
+	
+	// Test SimpleXLSX
+	//case 'SimpleXLSX':
+	//case_SimpleXLSX();
+	//break;
+	
+	// Load an item by hash (i.e., when a permalink is used)
+	case 'auto-item':
+	isAjax(true);
+	case_auto_item();
+	break;
+	
 	
 	default:
-	echo "case 'default' not implemented yet.";
 	break;
+}
+
+
+function case_SimpleXLSX() {
+
+	require_once(CORE_DIR . DIRECTORY_SEPARATOR . 'SimpleXLSX.php');
+	include_once(CORE_DIR . DIRECTORY_SEPARATOR . 'Item.php');
+	
+	$output = '';
+	if ( $xlsx = SimpleXLSX::parse(DB_DIR . DIRECTORY_SEPARATOR . Item::BOOSTRAP_FILENAME) ) {
+		$output = print_r( $xlsx->rows(), true );
+	} else {
+		$output = SimpleXLSX::parseError();
+	}
+	
+	
+	echo $output;
+}
+
+
+function case_duplicates() {
+	include_once(CORE_DIR . DIRECTORY_SEPARATOR . 'Item.php');
+	$item = Item::Instance();
+	echo json_encode($item->GetDuplicates());
+}
+
+
+function case_auto_item() {
+	
+	
+	
+	include_once(CORE_DIR . DIRECTORY_SEPARATOR . 'Item.php');
+	
+	if (!isset($_REQUEST['hash']) or strlen($_REQUEST['hash']) != 32) {
+		return json_encode(['items' => []]);
+	}
+	
+	$item = Item::Instance();
+	echo json_encode(['items' => [$item->GetItemByHash($_REQUEST['hash'])]]);
 }
 
 
@@ -108,13 +166,17 @@ function case_oaks() {
 
 
 function case_sq3_query() {
+	
+	print_r(SQLite3::version());
+	
+	
 	$query = null;
 	$results = [];
 	if (isset($_REQUEST['query'])) {
 		$db = db();
 		$data = $db->query($_REQUEST['query']);
-		while ($row = $data->fetchArray()) {
-			$results[] = implode(",\t", $row);
+		while ($row = $data->fetchArray(SQLITE3_ASSOC)) {
+			$results[] = print_r($row, true);
 		}
 	}
 	$results = implode('<br>', $results);
