@@ -75,9 +75,15 @@ foreach ($cola as $type => $select_data) {
 EOT;
 }
 
+$hidden1 = 'hidden';
+$hidden2 = '';
+
+
 if (!isset($_REQUEST['hash'])) {
 	$auto_load_item = '';
 } else {
+	$hidden1 = '';
+	$hidden2 = 'hidden';
 	$hash = htmlspecialchars($_REQUEST['hash']);
 	$auto_load_item = <<<EOT
 <div data-item-hash="$hash"></div>
@@ -92,7 +98,7 @@ if (isset($_REQUEST['q2'])) {
 
 	// title, published_date, document_number, archive_number, authors, comments, bib_text, origin_name, categories, location_name, public_url, pdf_url
 echo <<<EOT
-<section id="page-archive" class="hidden">
+<section id="page-archive" class="$hidden1">
 	<h1 style="padding-bottom: 0">The Archive</h1>
 	<p style="padding-bottom: 20px; font-style: italic;">A searchable database of works from Prof. Batcher and his colleagues. A subset of this archive
 	are items from the KSU OAKs database.</p>
@@ -200,7 +206,7 @@ $select_dropdowns
 
 $auto_load_item
 </section>
-<section id="page-archive2">
+<section id="page-archive2" class="$hidden2">
 	<h1 style="padding-bottom: 0">Search KSU OAKS Database</h1>
 	<p style="padding-bottom: 20px; font-style: italic;">The KSU OAKS search is a keyword search of <span style="font-style: normal; font-weight: bold;">Title</span>, <span style="font-style: normal; font-weight: bold;">Abstract</span>, and the <span style="font-style: normal; font-weight: bold;" title="When available for a particular record, OCR Text is the scanned text of printed documents.">OCR Text<sup>*</sup></span>. </p>
 	<p style="padding-bottom: 20px; font-style: italic;">Follow <a href="https://oaks.kent.edu/kenneth-e-batcher-collection">this</a> link to view the "Kenneth E. Batcher Collection: Papers from the Parallel and Associative Computing Laboratory Collections" directly on the KSU OAKs website.</p>
