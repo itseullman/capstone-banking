@@ -95,8 +95,7 @@ echo <<<EOT
 <section id="page-archive" class="hidden">
 	<h1 style="padding-bottom: 0">The Archive</h1>
 	<p style="padding-bottom: 20px; font-style: italic;">A searchable database of works from Prof. Batcher and his colleagues. A subset of this archive
-	are items from the KSU OAKs database.<br>
-	To directly search only the OAKs database, click <a href="./index.php?page=oaks" title="Search the KSU OAKs Database">here</a>.</p>
+	are items from the KSU OAKs database.</p>
 	
 	<div style="display: flex">
 		
