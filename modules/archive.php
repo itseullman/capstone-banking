@@ -84,11 +84,15 @@ if (!isset($_REQUEST['hash'])) {
 EOT;
 }
 
+$q2 = '';
+if (isset($_REQUEST['q2'])) {
+	$q2 = htmlspecialchars($_REQUEST['q2']);
+}
 
 
 	// title, published_date, document_number, archive_number, authors, comments, bib_text, origin_name, categories, location_name, public_url, pdf_url
 echo <<<EOT
-<section id="page-archive">
+<section id="page-archive" class="hidden">
 	<h1 style="padding-bottom: 0">The Archive</h1>
 	<p style="padding-bottom: 20px; font-style: italic;">A searchable database of works from Prof. Batcher and his colleagues. A subset of this archive
 	are items from the KSU OAKs database.<br>
@@ -197,6 +201,22 @@ $select_dropdowns
 
 $auto_load_item
 </section>
+<section id="page-archive2">
+	<h1 style="padding-bottom: 0">Search KSU OAKS Database</h1>
+	<p style="padding-bottom: 20px; font-style: italic;">The KSU OAKS search is a keyword search of <span style="font-style: normal; font-weight: bold;">Title</span>, <span style="font-style: normal; font-weight: bold;">Abstract</span>, and the <span style="font-style: normal; font-weight: bold;" title="When available for a particular record, OCR Text is the scanned text of printed documents.">OCR Text<sup>*</sup></span>. </p>
+	<p style="padding-bottom: 20px; font-style: italic;">Follow <a href="https://oaks.kent.edu/kenneth-e-batcher-collection">this</a> link to view the "Kenneth E. Batcher Collection: Papers from the Parallel and Associative Computing Laboratory Collections" directly on the KSU OAKs website.</p>
+	<form method="get" action="./index.php?page=data&action=oaks">
+		<input type="search" value="$q2">
+		<input type="submit" value="Search">
+		<img class="hidden" src="./img/loading.gif">
+	</form>
+	
+	<div class="ajax-error-response"></div>
+	<br>
+	<br>
+</section>
+<script src="./scripts/crypto-core.min.js"></script>
+<script src="./scripts/crypto-md5.min.js"></script>
 <script type="module" src="./scripts/archive.js"></script>
 EOT;
 

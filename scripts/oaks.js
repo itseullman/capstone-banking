@@ -1,12 +1,12 @@
 "use strict";
 
-if (typeof ArchiveProgram !== 'undefined') {
+if (typeof ArchiveProgram2 !== 'undefined') {
 	throw "The variable Program has already been defined. No javascript will be available on this page.";
 }
 
 import {ArchiveResultFormatterOaksTable} from './ArchiveResultFormatter.js';
 
-var ArchiveProgram = {
+var ArchiveProgram2 = {
 	
 	page: null,
 	
@@ -113,13 +113,13 @@ var ArchiveProgram = {
 	*/
 	Ajax: function (config) {
 		if (!(config instanceof Object)) {
-			throw "ArchiveProgram.Ajax requires a config object.";
+			throw "ArchiveProgram2.Ajax requires a config object.";
 		}
 		if (typeof config.url !== "string" || config.url.length === 0) {
-			throw "ArchiveProgram.Ajax requires config.url to be specified.";
+			throw "ArchiveProgram2.Ajax requires config.url to be specified.";
 		}
 		if (typeof config.success !== "function") {
-			throw "ArchiveProgram.Ajax requires a config.success callback.";
+			throw "ArchiveProgram2.Ajax requires a config.success callback.";
 		}
 		if (typeof config.fail !== "function") {
 			config.fail = function () {};
@@ -146,7 +146,7 @@ var ArchiveProgram = {
 
 
 
-ArchiveProgram.Start();
+ArchiveProgram2.Start();
 
 /*
 JSON data structure of OAKS database response:

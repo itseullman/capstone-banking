@@ -39,66 +39,66 @@ body > header {
 
 
 .header {
-
-  top:0;
-  background: #0a0d6f;
-  color: #ffffff;
-  padding-top: 10px;
-  text-align: center;
+	top:0;
+	background: #0a0d6f;
+	color: #ffffff;
+	padding-top: 10px;
+	text-align: center;
 }
 
 .header h1 {
-  color: #ffab1b;
-  margin: 0;
-  padding-left: 20px;
+	color: #ffab1b;
+	margin: 0;
+	padding-left: 20px;
 }
 
 #navbar {
-  overflow: hidden;
-  background: #0a0d6f;
-  color: #ffffff;
-
+	background: #0a0d6f;
+	color: #ffffff;
+	height: 50px;
+	position: relative;
 }
 
 #navbar a {
- float: left;
- color: #f2f2f2;
- text-align: center;
- padding: 14px 16px;
- text-decoration: none;
- font-size: 17px;
-
+	color: #f2f2f2;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	font-size: 17px;
+	position: relative;
+	top: 14px;
 }
 
 .topnav-right {
-  float: right;
+	position: absolute;
+	right: 10px;
 }
 
 #navbar a:hover {
-  background-color: #ddd;
-  color: black;
+	background-color: #ffab1b;
+	color: black;
 }
 
 #navbar a.active {
-  background-color: #04AA6D;
-  color: white;
+	background-color: #04AA6D;
+	color: white;
 }
 
 
 
 .content {
-  padding: 16px;
+	padding: 16px;
 }
 
 .sticky {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1;
+	position: fixed !important;
+	top: 0;
+	width: 100%;
+	z-index: 1;
 }
 
 .sticky + .content {
-  padding-top: 60px;
+	padding-top: 60px;
 }
 
 
@@ -154,6 +154,9 @@ body > header > nav ul a:hover {
 body > main {
 	max-width: 1200px;
 	margin: 0 auto;
+}
+body > main.main-sticky {
+	padding-top: 50px;
 }
 
 body > footer {
@@ -232,6 +235,26 @@ input[type='search'] {
 	position: relative;
 }
 
+#navbar button {
+	display: block;
+	position: absolute;
+	right: 51vw;
+	color: black;
+	background-color: #ffab1b;
+	padding: 14px 16px;
+	text-decoration: none;
+	font-size: 17px;
+	border: none;
+	bottom: 0;
+}
+#navbar button + button {
+	right: unset;
+	left: 51vw;
+}
+#navbar button:hover {
+	background-color: #f4f4f4;
+}
+
 /*
 #page-archive form input,
 #page-archive form button {
@@ -245,7 +268,8 @@ input[type='search'] {
 }
 
 /* loading spinner */
-#page-archive form img {
+#page-archive form img,
+#page-archive2 form img {
 	width: 30px;
 	height: 30px;
 	position: relative;
@@ -358,14 +382,14 @@ input[type='search'] {
 	display: flex;
 	overflow: hidden;
 }
-#page-archive dl.search-results-row-block  > div {
+#page-archive dl.search-results-row-block	> div {
 	display: inline-block;
 }
-#page-archive dl.search-results-row-block  > div[data-block] {
+#page-archive dl.search-results-row-block	> div[data-block] {
 	width: 100%;
 	overflow: unset;
 }
-#page-archive dl.search-results-row-block  > div[data-block] dd {
+#page-archive dl.search-results-row-block	> div[data-block] dd {
 	width: unset;
 }
 

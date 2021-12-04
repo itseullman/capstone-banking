@@ -142,6 +142,7 @@ function stringReplacements($page, $string) {
 	//		$string
 	//	);
 	//}
+	
 	return $string;
 }
 
@@ -222,16 +223,25 @@ if (isAjax()) {
 	// If we need to output HTML Headers, this is the place to do it,
 	// since at this point, no output has been sent to the browser
 
+	
+	$archive_tab_buttons = '';
+	if (REQUEST_PAGE == 'archive') {
+		$archive_tab_buttons = <<<EOT
+		<button type="button" data-first>KSU OAKS Database</button><button type="button" data-second>Local Database</button>
+EOT;
+	}
 	echo str_replace(
 		[
-			'{{main-body}}', 														// search
+			'{{main-body}}',
 			'{{curr_year}}',
-		], 														// search
+			'{{archive-tab-buttons}}',
+		], 														
 		// Get the contents of the buffer,
 		// and wipe the buffer clean.	
 		[
-			$output, 																// replace
+			$output,
 			date('Y'),
+			$archive_tab_buttons,
 		],
 		file_get_contents(VIEW_DIR . DIRECTORY_SEPARATOR . 'main.html')		// context
 	);

@@ -16,18 +16,18 @@ if (!is_array($max_year)) {
 	$max_year = $max_year['meta_value'];
 }
 
-$q = '';
-if (isset($_REQUEST['q'])) {
-	$q = htmlspecialchars($_REQUEST['q']);
+$q2 = '';
+if (isset($_REQUEST['q2'])) {
+	$q2 = htmlspecialchars($_REQUEST['q2']);
 }
 
 
 echo <<<EOT
-<section id="page-archive">
+<section id="page-archive2">
 	<h1 style="padding-bottom: 0">Search KSU OAKs Database</h1>
 	<p style="padding-bottom: 20px; font-style: italic;">Follow <a href="https://oaks.kent.edu/kenneth-e-batcher-collection">this</a> link to view the "Kenneth E. Batcher Collection: Papers from the Parallel and Associative Computing Laboratory Collections" directly on the KSU OAKs website.</p>
 	<form method="get" action="./index.php?page=data&action=oaks">
-		<input type="search" value="$q">
+		<input type="search" value="$q2">
 		<input type="submit" value="Search">
 		<img class="hidden" src="./img/loading.gif">
 	</form>
@@ -38,6 +38,5 @@ echo <<<EOT
 </section>
 <script src="./scripts/crypto-core.min.js"></script>
 <script src="./scripts/crypto-md5.min.js"></script>
-<script type="module" src="./scripts/oaks.js"></script>
 EOT;
 
